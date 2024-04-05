@@ -1,12 +1,11 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Quality;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
+import com.dpm.dailyPerformanceManagement.repositories.QKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.repositories.QualityRepo;
 import com.dpm.dailyPerformanceManagement.services.QualityService;
 import lombok.AllArgsConstructor;
@@ -24,9 +23,15 @@ public class QualityServiceImpl implements QualityService {
     DataByDateRepo dataByDateRepo;
     QualityRepo qualityRepo;
     ActionPlanRepo actionPlanRepo;
-
+    QKpiNamesRepo qKpiNamesRepo;
     @Override
     public void addQualityData(RequestModel rm) {
+        QKpiNames dKpiNames=qKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            QKpiNames dk=new QKpiNames();
+            dk.setKpiName(rm.getName());
+            qKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Quality d = extractedDelivery(rm);

@@ -1,11 +1,13 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
+import com.dpm.dailyPerformanceManagement.domain.DKpiNames;
 import com.dpm.dailyPerformanceManagement.domain.DataByDate;
 import com.dpm.dailyPerformanceManagement.domain.Delivery;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
+import com.dpm.dailyPerformanceManagement.repositories.DKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DeliveryRepo;
 import com.dpm.dailyPerformanceManagement.services.DeliveryService;
@@ -23,9 +25,15 @@ public class DeliveryServiceImpl implements DeliveryService {
     DeliveryRepo deliveryRepo;
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
-
+    DKpiNamesRepo dKpiNamesRepo;
     @Override
     public void addDeliveryData(RequestModel rm) {
+        DKpiNames dKpiNames=dKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            DKpiNames dk=new DKpiNames();
+            dk.setKpiName(rm.getName());
+            dKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Delivery d = extractedDelivery(rm);

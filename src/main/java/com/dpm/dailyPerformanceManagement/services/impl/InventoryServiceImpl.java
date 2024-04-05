@@ -1,12 +1,11 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Inventory;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
+import com.dpm.dailyPerformanceManagement.repositories.IKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.repositories.InventoryRepo;
 import com.dpm.dailyPerformanceManagement.services.InventoryService;
 import lombok.AllArgsConstructor;
@@ -23,10 +22,15 @@ public class InventoryServiceImpl implements InventoryService {
     InventoryRepo inventoryRepo;
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
-
+    IKpiNamesRepo iKpiNamesRepo;
     @Override
     public void addInventoryData(RequestModel rm) {
-
+        IKpiNames dKpiNames=iKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            IKpiNames dk=new IKpiNames();
+            dk.setKpiName(rm.getName());
+            iKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Inventory d = extractedDelivery(rm);

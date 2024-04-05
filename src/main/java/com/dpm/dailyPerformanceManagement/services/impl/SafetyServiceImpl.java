@@ -1,13 +1,12 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Safety;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
 import com.dpm.dailyPerformanceManagement.repositories.SafetyRepo;
+import com.dpm.dailyPerformanceManagement.repositories.SfKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.services.SafetyService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,9 +22,15 @@ public class SafetyServiceImpl implements SafetyService {
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
     SafetyRepo safetyRepo;
-
+    SfKpiNamesRepo sfKpiNamesRepo;
     @Override
     public void addSafetyData(RequestModel rm) {
+        SfKpiNames dKpiNames=sfKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            SfKpiNames dk=new SfKpiNames();
+            dk.setKpiName(rm.getName());
+            sfKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Safety d = extractedDelivery(rm);

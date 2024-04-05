@@ -1,12 +1,11 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Skills;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
+import com.dpm.dailyPerformanceManagement.repositories.SkKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.repositories.SkillsRepo;
 import com.dpm.dailyPerformanceManagement.services.SkillsService;
 import lombok.AllArgsConstructor;
@@ -23,8 +22,15 @@ public class SkillsServiceImpl implements SkillsService {
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
     SkillsRepo skillsRepo;
+    SkKpiNamesRepo skKpiNamesRepo;
     @Override
     public void addSkillsData(RequestModel rm) {
+        SkKpiNames dKpiNames=skKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            SkKpiNames dk=new SkKpiNames();
+            dk.setKpiName(rm.getName());
+            skKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Skills d = extractedDelivery(rm);

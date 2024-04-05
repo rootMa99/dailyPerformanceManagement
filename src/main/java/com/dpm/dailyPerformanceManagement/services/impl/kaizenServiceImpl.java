@@ -1,12 +1,11 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Kaizen;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
+import com.dpm.dailyPerformanceManagement.repositories.KKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.repositories.KaizenRepo;
 import com.dpm.dailyPerformanceManagement.services.KaizenService;
 import lombok.AllArgsConstructor;
@@ -24,9 +23,15 @@ public class kaizenServiceImpl implements KaizenService {
     KaizenRepo kaizenRepo;
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
-
+    KKpiNamesRepo kKpiNamesRepo;
     @Override
     public void addKaizenData(RequestModel rm) {
+        KKpiNames dKpiNames=kKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            KKpiNames dk=new KKpiNames();
+            dk.setKpiName(rm.getName());
+            kKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Kaizen d = extractedDelivery(rm);

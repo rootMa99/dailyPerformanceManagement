@@ -1,12 +1,11 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Productivity;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
+import com.dpm.dailyPerformanceManagement.repositories.PKpiNamesRepo;
 import com.dpm.dailyPerformanceManagement.repositories.ProductivityRepo;
 import com.dpm.dailyPerformanceManagement.services.ProductivityService;
 import lombok.AllArgsConstructor;
@@ -23,9 +22,15 @@ public class ProductivityServiceImpl implements ProductivityService {
     ProductivityRepo productivityRepo;
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
-
+    PKpiNamesRepo pKpiNamesRepo;
     @Override
     public void addProductivityData(RequestModel rm) {
+        PkpiNames dKpiNames=pKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames==null){
+            PkpiNames dk=new PkpiNames();
+            dk.setKpiName(rm.getName());
+            pKpiNamesRepo.save(dk);
+        }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
         if (dbd == null) {
             Productivity d = extractedDelivery(rm);
