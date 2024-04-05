@@ -10,7 +10,6 @@ import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
 import com.dpm.dailyPerformanceManagement.repositories.DeliveryRepo;
 import com.dpm.dailyPerformanceManagement.services.DeliveryService;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -61,7 +60,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         return d;
     }
 
-
+    @Override
     public void addActionPlan(List<ActionPlanModel> apm, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getDeliveries().isEmpty()) {
@@ -78,6 +77,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     acp.setResp(ap.getResp());
                     acp.setDueDate(ap.getDueDate());
                     acp.setStatus(ap.getStatus());
+                    acp.setIssueDescription(ap.getIssueDescription());
                     acp.setDelivery(delivery);
                     aps.add(acp);
                 }
