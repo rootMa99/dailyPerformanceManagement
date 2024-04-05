@@ -48,6 +48,10 @@ public class DeliveryServiceImpl implements DeliveryService {
                     d.setDbd(dbd);
                     deliveryRepo.save(d);
                 }
+            } else {
+                Delivery d = extractedDelivery(rm);
+                d.setDbd(dbd);
+                deliveryRepo.save(d);
             }
         }
     }
