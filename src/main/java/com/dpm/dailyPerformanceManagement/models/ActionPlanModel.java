@@ -5,6 +5,7 @@ import lombok.Data;
 import java.util.Date;
 @Data
 public class ActionPlanModel {
+    private Long id;
     private String issueDescription;
     private String causes;
     private String contermeasures;
