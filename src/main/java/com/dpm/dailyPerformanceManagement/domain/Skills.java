@@ -1,6 +1,5 @@
 package com.dpm.dailyPerformanceManagement.domain;
 
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,12 +9,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name = "delivery")
+@Entity(name = "skills")
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-public class Delivery {
+public class Skills {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
