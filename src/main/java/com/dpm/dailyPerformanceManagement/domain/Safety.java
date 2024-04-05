@@ -20,4 +20,5 @@ public class Safety {
     private Long id;
     private double realValue;
     private double targetValue;
+    private String name;
 }

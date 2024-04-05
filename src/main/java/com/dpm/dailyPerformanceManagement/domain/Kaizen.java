@@ -20,4 +20,5 @@ public class Kaizen {
     private Long id;
     private double realValue;
     private double targetValue;
+    private String name;
 }

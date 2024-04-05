@@ -21,4 +21,6 @@ public class Delivery {
     private Long id;
     private double realValue;
     private double targetValue;
+    private String name;
+
 }
