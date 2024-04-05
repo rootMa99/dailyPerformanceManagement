@@ -1,10 +1,13 @@
 package com.dpm.dailyPerformanceManagement.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Entity(name = "skills")
 @AllArgsConstructor
@@ -21,4 +24,7 @@ public class Skills {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dbd_id")
     private DataByDate dbd;
+    @OneToMany(mappedBy = "skills", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<ActionPlan> actionPlans;
 }
