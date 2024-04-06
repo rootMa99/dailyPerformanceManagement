@@ -43,4 +43,5 @@ public class DataByDate {
     @OneToMany(mappedBy = "dbd", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Skills> skillsList;
+
 }

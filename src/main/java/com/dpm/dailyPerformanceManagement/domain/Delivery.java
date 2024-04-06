@@ -28,4 +28,5 @@ public class Delivery {
     @OneToMany(mappedBy = "delivery", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ActionPlan> actionPlans;
+
 }
