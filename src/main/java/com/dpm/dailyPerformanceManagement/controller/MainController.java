@@ -26,6 +26,10 @@ public class MainController {
                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getInventoryDateBetween(startDate, endDate);
     }
-
+    @GetMapping(path = "/kaizen")
+    public List<DataRest> getKaizen(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+        return dataByDateService.getKaizenDateBetween(startDate, endDate);
+    }
 
 }
