@@ -36,4 +36,9 @@ public class MainController {
                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getProductivityDateBetween(startDate, endDate);
     }
+    @GetMapping(path = "/quality")
+    public List<DataRest> getQuality(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+        return dataByDateService.getQualityDateBetween(startDate, endDate);
+    }
 }
