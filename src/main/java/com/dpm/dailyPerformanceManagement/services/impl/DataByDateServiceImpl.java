@@ -5,11 +5,17 @@ import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.DataRest;
 import com.dpm.dailyPerformanceManagement.models.KpiRest;
+import com.dpm.dailyPerformanceManagement.models.Utils;
 import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.DataByDateService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +24,8 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class DataByDateServiceImpl implements DataByDateService {
+    Utils utils;
+    FilesRepo filesRepo;
     DeliveryRepo deliveryRepo;
     InventoryRepo inventoryRepo;
     KaizenRepo kaizenRepo;
@@ -220,6 +228,76 @@ public class DataByDateServiceImpl implements DataByDateService {
             drs.add(dr);
         }
         return drs;
+    }
+
+
+    @Override
+    public Files getFileByFileId(String fileId) throws FileNotFoundException {
+        Files fe=filesRepo.findByFileId(fileId);
+        if (fe ==null){
+            throw new FileNotFoundException("File not found with id " + fileId);
+        }
+        return fe;
+    }
+
+    @Override
+    public Files uploadFile(MultipartFile file) throws IOException {
+
+        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+        try {
+
+            if (fileName.contains("..")) {
+                throw new IOException("File Name Contain A Invalid Path Sequence");
+            }
+
+            String fileId = utils.generateProjectId(22);
+            String fileDownloadUri =
+                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(fileId).toUriString();
+
+            return new Files(fileId, fileName, file.getContentType(), file.getBytes(),
+                    fileDownloadUri);
+        } catch (
+                Exception e
+        ) {
+            throw new IOException("Could not store file " + fileName + ". Please try again!");
+        }
+    }
+
+    @Override
+    public void addKpiOwner(String kpiOwn, String name, String coName, MultipartFile file) throws IOException {
+        Files filesf=filesRepo.findByFileId(kpiOwn);
+        if (filesf==null){
+            Files fileEntity= uploadFile(file);
+            String fileDownloadUri =
+                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(
+                            kpiOwn).toUriString();
+            fileEntity.setFileDownloadUri(fileDownloadUri);
+            fileEntity.setFileName(name);
+            fileEntity.setFileId(kpiOwn);
+            KpiOwner kpiOwner=new KpiOwner();
+            kpiOwner.setKpiOwn(kpiOwn);
+            kpiOwner.setName(name);
+            kpiOwner.setCoName(coName);
+            kpiOwner=kpiOwnerRepo.save(kpiOwner);
+            fileEntity.setKpiOwner(kpiOwner);
+            filesRepo.save(fileEntity);
+        }else {
+            String fileDownloadUri =
+                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(
+                            kpiOwn).toUriString();
+            filesf.setFileDownloadUri(fileDownloadUri);
+            filesf.setFileName(name);
+            filesf.setFileId(kpiOwn);
+            KpiOwner kpiOwner=new KpiOwner();
+            kpiOwner.setId(filesf.getKpiOwner().getId());
+            kpiOwner.setKpiOwn(kpiOwn);
+            kpiOwner.setName(name);
+            kpiOwner.setCoName(coName);
+            kpiOwner=kpiOwnerRepo.save(kpiOwner);
+            filesf.setKpiOwner(kpiOwner);
+            filesRepo.save(filesf);
+        }
+
     }
 
 
