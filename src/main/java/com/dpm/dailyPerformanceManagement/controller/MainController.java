@@ -31,5 +31,9 @@ public class MainController {
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getKaizenDateBetween(startDate, endDate);
     }
-
+    @GetMapping(path = "/productivity")
+    public List<DataRest> getProductivity(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+        return dataByDateService.getProductivityDateBetween(startDate, endDate);
+    }
 }
