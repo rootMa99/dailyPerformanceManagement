@@ -137,6 +137,33 @@ public class DataByDateServiceImpl implements DataByDateService {
         return drs;
     }
 
+    @Override
+    public List<DataRest> getQualityDateBetween(Date start, Date end) {
+        List<Quality> ds = qualityRepo.findAllByDbdDateDpmBetween(start, end);
+        List<DataRest> drs = new ArrayList<>();
+        for (Quality d : ds) {
+            DataRest dr = new DataRest();
+            dr.setDDate(d.getDbd().getDateDpm());
+            dr.setReal(d.getRealValue());
+            dr.setTarget(d.getTargetValue());
+            dr.setName(d.getName());
+            List<ActionPlanModel> apms = new ArrayList<>();
+            for (ActionPlan ap : d.getActionPlans()) {
+                ActionPlanModel apm = new ActionPlanModel();
+                apm.setId(ap.getId());
+                apm.setIssueDescription(ap.getIssueDescription());
+                apm.setCauses(ap.getCauses());
+                apm.setContermeasures(ap.getContermeasures());
+                apm.setResp(ap.getResp());
+                apm.setDueDate(ap.getDueDate());
+                apm.setStatus(ap.getStatus());
+                apms.add(apm);
+            }
+            dr.setApm(apms);
+            drs.add(dr);
+        }
+        return drs;
+    }
 
 
 }
