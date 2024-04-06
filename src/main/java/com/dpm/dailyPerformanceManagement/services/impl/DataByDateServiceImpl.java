@@ -20,14 +20,10 @@ import java.util.List;
 public class DataByDateServiceImpl implements DataByDateService {
     DeliveryRepo deliveryRepo;
 
-
     @Override
     public List<DataRest> getDelivriesDateBetween(Date start, Date end){
-
         List<Delivery> ds = deliveryRepo.findAllByDbdDateDpmBetween(start, end);
-
         List<DataRest> drs= new ArrayList<>();
-
         for (Delivery d:ds){
             DataRest dr=new DataRest();
             dr.setDDate(d.getDbd().getDateDpm());
@@ -49,9 +45,6 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setApm(apms);
             drs.add(dr);
         }
-
-
-
         return drs;
     }
 
