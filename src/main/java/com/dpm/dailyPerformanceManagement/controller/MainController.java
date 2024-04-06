@@ -46,4 +46,9 @@ public class MainController {
                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getSafetyDateBetween(startDate, endDate);
     }
+    @GetMapping(path = "/skills")
+    public List<DataRest> getSkkills(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
+                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+        return dataByDateService.getSkillsDateBetween(startDate, endDate);
+    }
 }
