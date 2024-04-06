@@ -8,6 +8,7 @@ import java.util.List;
 @Data
 public class DataRest {
     private Date dDate;
+    private String nameData;
     private RequestModel rm;
     private List<ActionPlanModel> apm;
 }
