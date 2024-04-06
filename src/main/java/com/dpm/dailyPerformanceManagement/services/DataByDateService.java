@@ -11,4 +11,6 @@ public interface DataByDateService {
     List<DataRest> getInventoryDateBetween(Date start, Date end);
 
     List<DataRest> getKaizenDateBetween(Date start, Date end);
+
+    List<DataRest> getProductivityDateBetween(Date start, Date end);
 }
