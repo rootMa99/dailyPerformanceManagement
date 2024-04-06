@@ -15,4 +15,6 @@ public interface DataByDateService {
     List<DataRest> getProductivityDateBetween(Date start, Date end);
 
     List<DataRest> getQualityDateBetween(Date start, Date end);
+
+    List<DataRest> getSafetyDateBetween(Date start, Date end);
 }
