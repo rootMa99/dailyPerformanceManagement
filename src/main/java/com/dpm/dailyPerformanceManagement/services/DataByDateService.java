@@ -1,6 +1,7 @@
 package com.dpm.dailyPerformanceManagement.services;
 
 import com.dpm.dailyPerformanceManagement.models.DataRest;
+import com.dpm.dailyPerformanceManagement.models.KpiRest;
 
 import java.util.Date;
 import java.util.List;
@@ -19,4 +20,6 @@ public interface DataByDateService {
     List<DataRest> getSafetyDateBetween(Date start, Date end);
 
     List<DataRest> getSkillsDateBetween(Date start, Date end);
+
+    List<KpiRest> getAllKpiOwner();
 }

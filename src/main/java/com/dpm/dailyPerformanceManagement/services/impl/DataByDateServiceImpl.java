@@ -4,6 +4,7 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.DataRest;
+import com.dpm.dailyPerformanceManagement.models.KpiRest;
 import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.DataByDateService;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ public class DataByDateServiceImpl implements DataByDateService {
     QualityRepo qualityRepo;
     SafetyRepo safetyRepo;
     SkillsRepo skillsRepo;
-
+    KpiOwnerRepo kpiOwnerRepo;
     @Override
     public List<DataRest> getDelivriesDateBetween(Date start, Date end) {
         List<Delivery> ds = deliveryRepo.findAllByDbdDateDpmBetween(start, end);
@@ -220,5 +221,25 @@ public class DataByDateServiceImpl implements DataByDateService {
         }
         return drs;
     }
+
+
+
+    @Override
+    public List<KpiRest> getAllKpiOwner(){
+        List<KpiOwner> kpiOwners=kpiOwnerRepo.findAll();
+        List<KpiRest> kpiRests =new ArrayList<>();
+
+        for (KpiOwner ko: kpiOwners){
+            KpiRest kr=new KpiRest();
+            kr.setName(ko.getName());
+            kr.setUri(ko.getFiles().getFileDownloadUri());
+            kr.setKpiOwn(ko.getKpiOwn());
+            kr.setCoName(ko.getCoName());
+            kpiRests.add(kr);
+        }
+
+        return kpiRests;
+    }
+
 
 }
