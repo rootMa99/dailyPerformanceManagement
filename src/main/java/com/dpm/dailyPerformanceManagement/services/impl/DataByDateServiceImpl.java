@@ -34,6 +34,7 @@ public class DataByDateServiceImpl implements DataByDateService {
     SafetyRepo safetyRepo;
     SkillsRepo skillsRepo;
     KpiOwnerRepo kpiOwnerRepo;
+
     @Override
     public List<DataRest> getDelivriesDateBetween(Date start, Date end) {
         List<Delivery> ds = deliveryRepo.findAllByDbdDateDpmBetween(start, end);
@@ -44,6 +45,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -72,6 +74,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -100,6 +103,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -128,6 +132,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -156,6 +161,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -184,6 +190,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -212,6 +219,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             dr.setReal(d.getRealValue());
             dr.setTarget(d.getTargetValue());
             dr.setName(d.getName());
+            dr.setType(d.getType());
             List<ActionPlanModel> apms = new ArrayList<>();
             for (ActionPlan ap : d.getActionPlans()) {
                 ActionPlanModel apm = new ActionPlanModel();
@@ -233,8 +241,8 @@ public class DataByDateServiceImpl implements DataByDateService {
 
     @Override
     public Files getFileByFileId(String fileId) throws FileNotFoundException {
-        Files fe=filesRepo.findByFileId(fileId);
-        if (fe ==null){
+        Files fe = filesRepo.findByFileId(fileId);
+        if (fe == null) {
             throw new FileNotFoundException("File not found with id " + fileId);
         }
         return fe;
@@ -251,49 +259,41 @@ public class DataByDateServiceImpl implements DataByDateService {
             }
 
             String fileId = utils.generateProjectId(22);
-            String fileDownloadUri =
-                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(fileId).toUriString();
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(fileId).toUriString();
 
-            return new Files(fileId, fileName, file.getContentType(), file.getBytes(),
-                    fileDownloadUri);
-        } catch (
-                Exception e
-        ) {
+            return new Files(fileId, fileName, file.getContentType(), file.getBytes(), fileDownloadUri);
+        } catch (Exception e) {
             throw new IOException("Could not store file " + fileName + ". Please try again!");
         }
     }
 
     @Override
     public void addKpiOwner(String kpiOwn, String name, String coName, MultipartFile file) throws IOException {
-        Files filesf=filesRepo.findByFileId(kpiOwn);
-        if (filesf==null){
-            Files fileEntity= uploadFile(file);
-            String fileDownloadUri =
-                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(
-                            kpiOwn).toUriString();
+        Files filesf = filesRepo.findByFileId(kpiOwn);
+        if (filesf == null) {
+            Files fileEntity = uploadFile(file);
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(kpiOwn).toUriString();
             fileEntity.setFileDownloadUri(fileDownloadUri);
             fileEntity.setFileName(name);
             fileEntity.setFileId(kpiOwn);
-            KpiOwner kpiOwner=new KpiOwner();
+            KpiOwner kpiOwner = new KpiOwner();
             kpiOwner.setKpiOwn(kpiOwn);
             kpiOwner.setName(name);
             kpiOwner.setCoName(coName);
-            kpiOwner=kpiOwnerRepo.save(kpiOwner);
+            kpiOwner = kpiOwnerRepo.save(kpiOwner);
             fileEntity.setKpiOwner(kpiOwner);
             filesRepo.save(fileEntity);
-        }else {
-            String fileDownloadUri =
-                    ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(
-                            kpiOwn).toUriString();
+        } else {
+            String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/dpm").path("/downloadFile/").path(kpiOwn).toUriString();
             filesf.setFileDownloadUri(fileDownloadUri);
             filesf.setFileName(name);
             filesf.setFileId(kpiOwn);
-            KpiOwner kpiOwner=new KpiOwner();
+            KpiOwner kpiOwner = new KpiOwner();
             kpiOwner.setId(filesf.getKpiOwner().getId());
             kpiOwner.setKpiOwn(kpiOwn);
             kpiOwner.setName(name);
             kpiOwner.setCoName(coName);
-            kpiOwner=kpiOwnerRepo.save(kpiOwner);
+            kpiOwner = kpiOwnerRepo.save(kpiOwner);
             filesf.setKpiOwner(kpiOwner);
             filesRepo.save(filesf);
         }
@@ -301,14 +301,13 @@ public class DataByDateServiceImpl implements DataByDateService {
     }
 
 
-
     @Override
-    public List<KpiRest> getAllKpiOwner(){
-        List<KpiOwner> kpiOwners=kpiOwnerRepo.findAll();
-        List<KpiRest> kpiRests =new ArrayList<>();
+    public List<KpiRest> getAllKpiOwner() {
+        List<KpiOwner> kpiOwners = kpiOwnerRepo.findAll();
+        List<KpiRest> kpiRests = new ArrayList<>();
 
-        for (KpiOwner ko: kpiOwners){
-            KpiRest kr=new KpiRest();
+        for (KpiOwner ko : kpiOwners) {
+            KpiRest kr = new KpiRest();
             kr.setName(ko.getName());
             kr.setUri(ko.getFiles().getFileDownloadUri());
             kr.setKpiOwn(ko.getKpiOwn());
