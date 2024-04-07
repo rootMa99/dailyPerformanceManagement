@@ -67,6 +67,7 @@ public class SafetyServiceImpl implements SafetyService {
         d.setTargetValue(rm.getTarget());
         d.setRealValue(rm.getReal());
         d.setName(rm.getName());
+        d.setType(rm.getType());
         return d;
     }
 

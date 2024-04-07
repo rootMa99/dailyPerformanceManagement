@@ -11,5 +11,6 @@ public class DataRest {
     private double real;
     private double target;
     private String name;
+    private String type;
     private List<ActionPlanModel> apm;
 }
