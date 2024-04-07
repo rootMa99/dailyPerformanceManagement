@@ -12,8 +12,10 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -65,7 +67,17 @@ public class MainController {
                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getSkillsDateBetween(startDate, endDate);
     }
+    @PostMapping("/kpio")
+    public void addFileToProject(@RequestParam String kpiOwn, @RequestParam String name, @RequestParam String coName,
+                                 @RequestParam(value = "file") MultipartFile file) throws IOException {
+        //FileEntity fileEntity=fileService.addFileToProject(projectName, file);
+        dataByDateService.addKpiOwner(kpiOwn, name, coName, file);
+    }
 
+    @PostMapping("/kpio/owner")
+    public void updateKpiOwner(@RequestParam String kpiOwn, @RequestParam String name, @RequestParam String coName){
+        dataByDateService.updateKpiOwn(kpiOwn, name, coName);
+    }
     @GetMapping("/downloadFile/{fileId:.+}")
     public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileId, HttpServletRequest request) throws FileNotFoundException {
         Files fileEntity = dataByDateService.getFileByFileId(fileId);

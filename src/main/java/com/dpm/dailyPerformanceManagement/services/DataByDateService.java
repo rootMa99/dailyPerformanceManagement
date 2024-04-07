@@ -31,5 +31,7 @@ public interface DataByDateService {
 
     void addKpiOwner(String kpiOwn, String name, String coName, MultipartFile file) throws IOException;
 
+    void updateKpiOwn(String kpi, String name, String cn);
+
     List<KpiRest> getAllKpiOwner();
 }

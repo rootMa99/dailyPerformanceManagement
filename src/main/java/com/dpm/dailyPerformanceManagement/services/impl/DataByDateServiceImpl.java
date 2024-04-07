@@ -299,6 +299,15 @@ public class DataByDateServiceImpl implements DataByDateService {
         }
 
     }
+    @Override
+    public void updateKpiOwn(String kpi, String name, String cn){
+        KpiOwner ko=kpiOwnerRepo.findByKpiOwn(kpi);
+        if (ko!=null){
+            ko.setName(name);
+            ko.setCoName(cn);
+            kpiOwnerRepo.save(ko);
+        }
+    }
 
 
     @Override
