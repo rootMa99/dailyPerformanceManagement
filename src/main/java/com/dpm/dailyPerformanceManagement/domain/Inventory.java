@@ -21,6 +21,7 @@ public class Inventory {
     private double realValue;
     private double targetValue;
     private String name;
+    private String type;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "dbd_id")
     private DataByDate dbd;
