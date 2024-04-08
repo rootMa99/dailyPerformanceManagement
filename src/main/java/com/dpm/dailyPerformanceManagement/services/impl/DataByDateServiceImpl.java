@@ -288,6 +288,7 @@ public class DataByDateServiceImpl implements DataByDateService {
             filesf.setFileDownloadUri(fileDownloadUri);
             filesf.setFileName(name);
             filesf.setFileId(kpiOwn);
+            filesf.setData(file.getBytes());
             KpiOwner kpiOwner = new KpiOwner();
             kpiOwner.setId(filesf.getKpiOwner().getId());
             kpiOwner.setKpiOwn(kpiOwn);
