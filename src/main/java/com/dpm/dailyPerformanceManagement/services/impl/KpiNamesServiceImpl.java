@@ -20,6 +20,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
     SfKpiNamesRepo sfKpiNamesRepo;
     SkKpiNamesRepo skKpiNamesRepo;
 
+    @Override
     public List<String> kpiNamesList(String name) {
         List<String> ls = new ArrayList<>();
         if (name.equals("delivery")) {

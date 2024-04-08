@@ -4,6 +4,7 @@ import com.dpm.dailyPerformanceManagement.domain.Files;
 import com.dpm.dailyPerformanceManagement.models.DataRest;
 import com.dpm.dailyPerformanceManagement.models.KpiRest;
 import com.dpm.dailyPerformanceManagement.services.DataByDateService;
+import com.dpm.dailyPerformanceManagement.services.KpiNamesService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
@@ -25,6 +26,7 @@ import java.util.List;
 @AllArgsConstructor
 public class MainController {
     DataByDateService dataByDateService;
+    KpiNamesService kpiNamesService;
 
     @GetMapping(path = "/delivery")
     public List<DataRest> getDelivery(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
@@ -89,6 +91,9 @@ public class MainController {
         return dataByDateService.getAllKpiOwner();
     }
 
-
+    @GetMapping("/kpiNames")
+    public List<String> updateKpiOwner(@RequestParam String kpiName){
+        return kpiNamesService.kpiNamesList(kpiName);
+    }
 
 }
