@@ -29,7 +29,11 @@ public class SkillsServiceImpl implements SkillsService {
         if (dKpiNames==null){
             SkKpiNames dk=new SkKpiNames();
             dk.setKpiName(rm.getName());
-            dk.setAlias(rm.getAlias());
+            if (rm.getAlias()==null){
+                dk.setAlias(rm.getName());
+            }else {
+                dk.setAlias(rm.getAlias());
+            }
             dk.setType(rm.getType());
             skKpiNamesRepo.save(dk);
         }

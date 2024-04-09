@@ -32,7 +32,11 @@ public class DeliveryServiceImpl implements DeliveryService {
         if (dKpiNames==null){
             DKpiNames dk=new DKpiNames();
             dk.setKpiName(rm.getName());
-            dk.setAlias(rm.getAlias());
+            if (rm.getAlias()==null){
+                dk.setAlias(rm.getName());
+            }else {
+                dk.setAlias(rm.getAlias());
+            }
             dk.setType(rm.getType());
             dKpiNamesRepo.save(dk);
         }

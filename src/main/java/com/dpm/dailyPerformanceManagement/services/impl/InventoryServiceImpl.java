@@ -29,7 +29,11 @@ public class InventoryServiceImpl implements InventoryService {
         if (dKpiNames==null){
             IKpiNames dk=new IKpiNames();
             dk.setKpiName(rm.getName());
-            dk.setAlias(rm.getAlias());
+            if (rm.getAlias()==null){
+                dk.setAlias(rm.getName());
+            }else {
+                dk.setAlias(rm.getAlias());
+            }
             dk.setType(rm.getType());
             iKpiNamesRepo.save(dk);
         }
