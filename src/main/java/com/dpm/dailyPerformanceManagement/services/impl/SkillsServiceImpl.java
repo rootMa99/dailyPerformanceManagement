@@ -72,7 +72,12 @@ public class SkillsServiceImpl implements SkillsService {
         Skills d = new Skills();
         d.setTargetValue(rm.getTarget());
         d.setRealValue(rm.getReal());
-        d.setName(rm.getName());
+        if (rm.getName()==null){
+            d.setName(rm.getAlias());
+
+        }else {
+            d.setName(rm.getName());
+        }
         d.setType(rm.getType());
         return d;
     }
