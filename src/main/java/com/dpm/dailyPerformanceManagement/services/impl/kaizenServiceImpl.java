@@ -29,11 +29,11 @@ public class kaizenServiceImpl implements KaizenService {
         KKpiNames dKpiNames=kKpiNamesRepo.findByKpiName(rm.getName());
         if (dKpiNames==null){
             KKpiNames dk=new KKpiNames();
-            dk.setKpiName(rm.getName());
-            if (rm.getAlias()==null){
-                dk.setAlias(rm.getName());
+            dk.setAlias(rm.getAlias());
+            if (rm.getName()==null){
+                dk.setKpiName(rm.getAlias());
             }else {
-                dk.setAlias(rm.getAlias());
+                dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
             kKpiNamesRepo.save(dk);

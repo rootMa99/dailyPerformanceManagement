@@ -28,11 +28,11 @@ public class SafetyServiceImpl implements SafetyService {
         SfKpiNames dKpiNames=sfKpiNamesRepo.findByKpiName(rm.getName());
         if (dKpiNames==null){
             SfKpiNames dk=new SfKpiNames();
-            dk.setKpiName(rm.getName());
-            if (rm.getAlias()==null){
-                dk.setAlias(rm.getName());
+            dk.setAlias(rm.getAlias());
+            if (rm.getName()==null){
+                dk.setKpiName(rm.getAlias());
             }else {
-                dk.setAlias(rm.getAlias());
+                dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
             sfKpiNamesRepo.save(dk);
