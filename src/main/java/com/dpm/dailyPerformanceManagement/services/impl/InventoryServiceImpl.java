@@ -29,6 +29,8 @@ public class InventoryServiceImpl implements InventoryService {
         if (dKpiNames==null){
             IKpiNames dk=new IKpiNames();
             dk.setKpiName(rm.getName());
+            dk.setAlias(rm.getAlias());
+            dk.setType(rm.getType());
             iKpiNamesRepo.save(dk);
         }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());

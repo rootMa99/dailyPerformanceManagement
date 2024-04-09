@@ -29,6 +29,8 @@ public class SafetyServiceImpl implements SafetyService {
         if (dKpiNames==null){
             SfKpiNames dk=new SfKpiNames();
             dk.setKpiName(rm.getName());
+            dk.setAlias(rm.getAlias());
+            dk.setType(rm.getType());
             sfKpiNamesRepo.save(dk);
         }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());

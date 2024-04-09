@@ -19,4 +19,6 @@ public class QKpiNames {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String kpiName;
+    private String alias;
+    private String type;
 }

@@ -2,6 +2,7 @@ package com.dpm.dailyPerformanceManagement.controller;
 
 import com.dpm.dailyPerformanceManagement.domain.Files;
 import com.dpm.dailyPerformanceManagement.models.DataRest;
+import com.dpm.dailyPerformanceManagement.models.KpiNameRest;
 import com.dpm.dailyPerformanceManagement.models.KpiRest;
 import com.dpm.dailyPerformanceManagement.services.DataByDateService;
 import com.dpm.dailyPerformanceManagement.services.KpiNamesService;
@@ -92,7 +93,7 @@ public class MainController {
     }
 
     @GetMapping("/kpiNames")
-    public List<String> updateKpiOwner(@RequestParam String kpiName){
+    public List<KpiNameRest> updateKpiOwner(@RequestParam String kpiName){
         return kpiNamesService.kpiNamesList(kpiName);
     }
 

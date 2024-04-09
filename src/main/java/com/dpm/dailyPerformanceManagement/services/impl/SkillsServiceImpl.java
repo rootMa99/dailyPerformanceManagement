@@ -29,6 +29,8 @@ public class SkillsServiceImpl implements SkillsService {
         if (dKpiNames==null){
             SkKpiNames dk=new SkKpiNames();
             dk.setKpiName(rm.getName());
+            dk.setAlias(rm.getAlias());
+            dk.setType(rm.getType());
             skKpiNamesRepo.save(dk);
         }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());

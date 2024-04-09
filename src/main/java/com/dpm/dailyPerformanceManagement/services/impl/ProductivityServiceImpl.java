@@ -29,6 +29,8 @@ public class ProductivityServiceImpl implements ProductivityService {
         if (dKpiNames==null){
             PkpiNames dk=new PkpiNames();
             dk.setKpiName(rm.getName());
+            dk.setAlias(rm.getAlias());
+            dk.setType(rm.getType());
             pKpiNamesRepo.save(dk);
         }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());

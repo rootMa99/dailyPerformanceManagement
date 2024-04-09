@@ -30,6 +30,8 @@ public class QualityServiceImpl implements QualityService {
         if (dKpiNames==null){
             QKpiNames dk=new QKpiNames();
             dk.setKpiName(rm.getName());
+            dk.setAlias(rm.getAlias());
+            dk.setType(rm.getType());
             qKpiNamesRepo.save(dk);
         }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());

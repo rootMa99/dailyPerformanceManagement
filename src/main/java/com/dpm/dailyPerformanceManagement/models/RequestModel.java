@@ -10,5 +10,6 @@ public class RequestModel {
     private double real;
     private double target;
     private String name;
+    private String alias;
     private String type;
 }

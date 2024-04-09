@@ -30,6 +30,8 @@ public class kaizenServiceImpl implements KaizenService {
         if (dKpiNames==null){
             KKpiNames dk=new KKpiNames();
             dk.setKpiName(rm.getName());
+            dk.setAlias(rm.getAlias());
+            dk.setType(rm.getType());
             kKpiNamesRepo.save(dk);
         }
         DataByDate dbd = dataByDateRepo.findByDateDpm(rm.getDate());
