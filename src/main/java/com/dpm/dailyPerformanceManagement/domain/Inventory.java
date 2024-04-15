@@ -28,4 +28,7 @@ public class Inventory {
     @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ActionPlan> actionPlans;
+    @OneToMany(mappedBy = "inventory", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Pareto> paretos;
 }

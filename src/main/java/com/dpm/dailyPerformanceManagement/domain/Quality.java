@@ -28,4 +28,7 @@ public class Quality {
     @OneToMany(mappedBy = "quality", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ActionPlan> actionPlans;
+    @OneToMany(mappedBy = "quality", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Pareto> paretos;
 }

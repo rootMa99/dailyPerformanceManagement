@@ -28,4 +28,7 @@ public class Kaizen {
     @OneToMany(mappedBy = "kaizen", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<ActionPlan> actionPlans;
+    @OneToMany(mappedBy = "kaizen", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Pareto> paretos;
 }
