@@ -2,11 +2,9 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.IKpiNamesRepo;
-import com.dpm.dailyPerformanceManagement.repositories.InventoryRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.InventoryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,7 @@ public class InventoryServiceImpl implements InventoryService {
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
     IKpiNamesRepo iKpiNamesRepo;
+    ParetoRepo paretoRepo;
     @Override
     public void addInventoryData(RequestModel rm) {
         IKpiNames dKpiNames=iKpiNamesRepo.findByKpiName(rm.getName());
@@ -102,6 +101,26 @@ public class InventoryServiceImpl implements InventoryService {
                     aps.add(acp);
                 }
                 actionPlanRepo.saveAll(aps);
+            }
+        }
+    }
+    @Override
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getDeliveries().isEmpty()) {
+            Optional<Inventory> deliveryWithNameAp =
+                    dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Inventory delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime= new ArrayList<>();
+                for (ParetoModel pm : pms){
+                    Pareto p=new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    p.setInventory(delivery);
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
             }
         }
     }
