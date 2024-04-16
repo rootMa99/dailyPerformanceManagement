@@ -2,11 +2,9 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.SafetyRepo;
-import com.dpm.dailyPerformanceManagement.repositories.SfKpiNamesRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.SafetyService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,15 +21,17 @@ public class SafetyServiceImpl implements SafetyService {
     ActionPlanRepo actionPlanRepo;
     SafetyRepo safetyRepo;
     SfKpiNamesRepo sfKpiNamesRepo;
+    ParetoRepo paretoRepo;
+
     @Override
     public void addSafetyData(RequestModel rm) {
-        SfKpiNames dKpiNames=sfKpiNamesRepo.findByKpiName(rm.getName());
-        if (dKpiNames==null){
-            SfKpiNames dk=new SfKpiNames();
+        SfKpiNames dKpiNames = sfKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames == null) {
+            SfKpiNames dk = new SfKpiNames();
             dk.setAlias(rm.getAlias());
-            if (rm.getName()==null){
+            if (rm.getName() == null) {
                 dk.setKpiName(rm.getAlias());
-            }else {
+            } else {
                 dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
@@ -47,8 +47,7 @@ public class SafetyServiceImpl implements SafetyService {
             safetyRepo.save(d);
         } else {
             if (!dbd.getSafeties().isEmpty()) {
-                Optional<Safety> deliveryWithNameAp =
-                        dbd.getSafeties().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
+                Optional<Safety> deliveryWithNameAp = dbd.getSafeties().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
 
                 if (deliveryWithNameAp.isPresent()) {
                     Safety delivery = deliveryWithNameAp.get();
@@ -82,8 +81,7 @@ public class SafetyServiceImpl implements SafetyService {
     public void addActionPlan(List<ActionPlanModel> apm, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getSafeties().isEmpty()) {
-            Optional<Safety> deliveryWithNameAp =
-                    dbd.getSafeties().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Safety> deliveryWithNameAp = dbd.getSafeties().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
 
             if (deliveryWithNameAp.isPresent()) {
                 Safety delivery = deliveryWithNameAp.get();
@@ -105,6 +103,23 @@ public class SafetyServiceImpl implements SafetyService {
         }
     }
 
-
+@Override
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getSafeties().isEmpty()) {
+            Optional<Safety> deliveryWithNameAp = dbd.getSafeties().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Safety delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime = new ArrayList<>();
+                for (ParetoModel pm : pms) {
+                    Pareto p = new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
+            }
+        }
+    }
 
 }
