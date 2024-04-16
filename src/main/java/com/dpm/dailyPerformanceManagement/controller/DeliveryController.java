@@ -1,6 +1,7 @@
 package com.dpm.dailyPerformanceManagement.controller;
 
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.services.DeliveryService;
 import lombok.AllArgsConstructor;
@@ -36,5 +37,13 @@ public class DeliveryController {
         }
     }
 
-
+    @PostMapping("/pareto")
+    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name,
+                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        try {
+            deliveryService.addPareto(actionPlanModel, name, date);
+        } catch (Error error) {
+            throw new RuntimeException(error);
+        }
+    }
 }

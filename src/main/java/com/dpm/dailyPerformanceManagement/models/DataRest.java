@@ -13,4 +13,5 @@ public class DataRest {
     private String name;
     private String type;
     private List<ActionPlanModel> apm;
+    private List<ParetoModel> pms;
 }

@@ -1,15 +1,10 @@
 package com.dpm.dailyPerformanceManagement.services.impl;
 
-import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
-import com.dpm.dailyPerformanceManagement.domain.DKpiNames;
-import com.dpm.dailyPerformanceManagement.domain.DataByDate;
-import com.dpm.dailyPerformanceManagement.domain.Delivery;
+import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DKpiNamesRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DeliveryRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.DeliveryService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,15 +21,18 @@ public class DeliveryServiceImpl implements DeliveryService {
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
     DKpiNamesRepo dKpiNamesRepo;
+    ParetoRepo paretoRepo;
+
+
     @Override
     public void addDeliveryData(RequestModel rm) {
-        DKpiNames dKpiNames=dKpiNamesRepo.findByKpiName(rm.getName());
-        if (dKpiNames==null){
-            DKpiNames dk=new DKpiNames();
+        DKpiNames dKpiNames = dKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames == null) {
+            DKpiNames dk = new DKpiNames();
             dk.setAlias(rm.getAlias());
-            if (rm.getName()==null){
+            if (rm.getName() == null) {
                 dk.setKpiName(rm.getAlias());
-            }else {
+            } else {
                 dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
@@ -101,6 +99,25 @@ public class DeliveryServiceImpl implements DeliveryService {
                     aps.add(acp);
                 }
                 actionPlanRepo.saveAll(aps);
+            }
+        }
+    }
+
+    @Override
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getDeliveries().isEmpty()) {
+            Optional<Delivery> deliveryWithNameAp = dbd.getDeliveries().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Delivery delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime= new ArrayList<>();
+                for (ParetoModel pm : pms){
+                    Pareto p=new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
             }
         }
     }
