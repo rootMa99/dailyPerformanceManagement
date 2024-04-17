@@ -102,7 +102,7 @@ public class ProductivityServiceImpl implements ProductivityService {
             }
         }
     }
-
+    @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getProductivities().isEmpty()) {
