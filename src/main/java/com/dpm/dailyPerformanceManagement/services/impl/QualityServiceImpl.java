@@ -2,11 +2,9 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.QKpiNamesRepo;
-import com.dpm.dailyPerformanceManagement.repositories.QualityRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.QualityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ public class QualityServiceImpl implements QualityService {
     QualityRepo qualityRepo;
     ActionPlanRepo actionPlanRepo;
     QKpiNamesRepo qKpiNamesRepo;
+    ParetoRepo paretoRepo;
     @Override
     public void addQualityData(RequestModel rm) {
         QKpiNames dKpiNames=qKpiNamesRepo.findByKpiName(rm.getName());
@@ -105,6 +104,28 @@ public class QualityServiceImpl implements QualityService {
             }
         }
     }
-
+    @Override
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getQualities().isEmpty()) {
+            Optional<Quality> deliveryWithNameAp =
+                    dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Quality delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime= new ArrayList<>();
+                for (ParetoModel pm : pms){
+                    if (pm.getMotif().isEmpty()){
+                        continue;
+                    }
+                    Pareto p=new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    p.setQuality(delivery);
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
+            }
+        }
+    }
 
 }
