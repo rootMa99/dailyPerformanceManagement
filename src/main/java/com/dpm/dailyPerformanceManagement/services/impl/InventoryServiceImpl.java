@@ -114,6 +114,9 @@ public class InventoryServiceImpl implements InventoryService {
                 Inventory delivery = deliveryWithNameAp.get();
                 List<Pareto> pmsPrime= new ArrayList<>();
                 for (ParetoModel pm : pms){
+                    if (pm.getMotif().isEmpty()){
+                        continue;
+                    }
                     Pareto p=new Pareto();
                     p.setMotif(pm.getMotif());
                     p.setPercentage(pm.getPercentage());

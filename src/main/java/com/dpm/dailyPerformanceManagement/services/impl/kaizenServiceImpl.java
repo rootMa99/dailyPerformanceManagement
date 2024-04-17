@@ -2,11 +2,9 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.KKpiNamesRepo;
-import com.dpm.dailyPerformanceManagement.repositories.KaizenRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.KaizenService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ public class kaizenServiceImpl implements KaizenService {
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
     KKpiNamesRepo kKpiNamesRepo;
+    ParetoRepo paretoRepo;
     @Override
     public void addKaizenData(RequestModel rm) {
         KKpiNames dKpiNames=kKpiNamesRepo.findByKpiName(rm.getName());
@@ -99,6 +98,29 @@ public class kaizenServiceImpl implements KaizenService {
                     aps.add(acp);
                 }
                 actionPlanRepo.saveAll(aps);
+            }
+        }
+    }
+    @Override
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getKaizens().isEmpty()) {
+            Optional<Kaizen> deliveryWithNameAp =
+                    dbd.getKaizens().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Kaizen delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime= new ArrayList<>();
+                for (ParetoModel pm : pms){
+                    if (pm.getMotif().isEmpty()){
+                        continue;
+                    }
+                    Pareto p=new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    p.setKaizen(delivery);
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
             }
         }
     }

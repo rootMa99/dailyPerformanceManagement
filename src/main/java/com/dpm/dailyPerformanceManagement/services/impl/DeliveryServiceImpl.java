@@ -112,9 +112,13 @@ public class DeliveryServiceImpl implements DeliveryService {
                 Delivery delivery = deliveryWithNameAp.get();
                 List<Pareto> pmsPrime= new ArrayList<>();
                 for (ParetoModel pm : pms){
+                    if (pm.getMotif().isEmpty()){
+                        continue;
+                    }
                     Pareto p=new Pareto();
                     p.setMotif(pm.getMotif());
                     p.setPercentage(pm.getPercentage());
+                    p.setDelivery(delivery);
                     pmsPrime.add(p);
                 }
                 paretoRepo.saveAll(pmsPrime);

@@ -2,11 +2,9 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.PKpiNamesRepo;
-import com.dpm.dailyPerformanceManagement.repositories.ProductivityRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.ProductivityService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,7 @@ public class ProductivityServiceImpl implements ProductivityService {
     DataByDateRepo dataByDateRepo;
     ActionPlanRepo actionPlanRepo;
     PKpiNamesRepo pKpiNamesRepo;
+    ParetoRepo paretoRepo;
     @Override
     public void addProductivityData(RequestModel rm) {
         PkpiNames dKpiNames=pKpiNamesRepo.findByKpiName(rm.getName());
@@ -100,6 +99,29 @@ public class ProductivityServiceImpl implements ProductivityService {
                     aps.add(acp);
                 }
                 actionPlanRepo.saveAll(aps);
+            }
+        }
+    }
+
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getProductivities().isEmpty()) {
+            Optional<Productivity> deliveryWithNameAp =
+                    dbd.getProductivities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Productivity delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime= new ArrayList<>();
+                for (ParetoModel pm : pms){
+                    if (pm.getMotif().isEmpty()){
+                        continue;
+                    }
+                    Pareto p=new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    p.setProductivity(delivery);
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
             }
         }
     }
