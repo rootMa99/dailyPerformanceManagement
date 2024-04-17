@@ -208,6 +208,14 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setStatus(ap.getStatus());
                 apms.add(apm);
             }
+            List<ParetoModel> paretoModels=new ArrayList<>();
+            for (Pareto p: d.getParetos()){
+                ParetoModel pm= new ParetoModel();
+                pm.setPercentage(p.getPercentage());
+                pm.setMotif(p.getMotif());
+                paretoModels.add(pm);
+            }
+            dr.setPms(paretoModels);
             dr.setApm(apms);
             drs.add(dr);
         }
