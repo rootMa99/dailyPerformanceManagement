@@ -2,10 +2,7 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 
 import com.dpm.dailyPerformanceManagement.domain.*;
-import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
-import com.dpm.dailyPerformanceManagement.models.DataRest;
-import com.dpm.dailyPerformanceManagement.models.KpiRest;
-import com.dpm.dailyPerformanceManagement.models.Utils;
+import com.dpm.dailyPerformanceManagement.models.*;
 import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.DataByDateService;
 import lombok.AllArgsConstructor;
@@ -58,7 +55,15 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setStatus(ap.getStatus());
                 apms.add(apm);
             }
+            List<ParetoModel> paretoModels=new ArrayList<>();
+            for (Pareto p: d.getParetos()){
+                ParetoModel pm= new ParetoModel();
+                pm.setPercentage(p.getPercentage());
+                pm.setMotif(p.getMotif());
+                paretoModels.add(pm);
+            }
             dr.setApm(apms);
+            dr.setPms(paretoModels);
             drs.add(dr);
         }
         return drs;
