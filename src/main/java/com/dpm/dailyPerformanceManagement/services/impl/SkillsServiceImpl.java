@@ -2,11 +2,9 @@ package com.dpm.dailyPerformanceManagement.services.impl;
 
 import com.dpm.dailyPerformanceManagement.domain.*;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
+import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
-import com.dpm.dailyPerformanceManagement.repositories.ActionPlanRepo;
-import com.dpm.dailyPerformanceManagement.repositories.DataByDateRepo;
-import com.dpm.dailyPerformanceManagement.repositories.SkKpiNamesRepo;
-import com.dpm.dailyPerformanceManagement.repositories.SkillsRepo;
+import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.SkillsService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,6 +21,7 @@ public class SkillsServiceImpl implements SkillsService {
     ActionPlanRepo actionPlanRepo;
     SkillsRepo skillsRepo;
     SkKpiNamesRepo skKpiNamesRepo;
+    ParetoRepo paretoRepo;
     @Override
     public void addSkillsData(RequestModel rm) {
         SkKpiNames dKpiNames=skKpiNamesRepo.findByKpiName(rm.getName());
@@ -106,6 +105,29 @@ public class SkillsServiceImpl implements SkillsService {
                     aps.add(acp);
                 }
                 actionPlanRepo.saveAll(aps);
+            }
+        }
+    }
+    @Override
+    public void addPareto(List<ParetoModel> pms, String name, Date date) {
+        DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        if (!dbd.getSkillsList().isEmpty()) {
+            Optional<Skills> deliveryWithNameAp =
+                    dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            if (deliveryWithNameAp.isPresent()) {
+                Skills delivery = deliveryWithNameAp.get();
+                List<Pareto> pmsPrime= new ArrayList<>();
+                for (ParetoModel pm : pms){
+                    if (pm.getMotif().isEmpty()){
+                        continue;
+                    }
+                    Pareto p=new Pareto();
+                    p.setMotif(pm.getMotif());
+                    p.setPercentage(pm.getPercentage());
+                    p.setSkills(delivery);
+                    pmsPrime.add(p);
+                }
+                paretoRepo.saveAll(pmsPrime);
             }
         }
     }
