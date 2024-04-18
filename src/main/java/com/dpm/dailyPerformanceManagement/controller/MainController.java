@@ -30,57 +30,50 @@ public class MainController {
     KpiNamesService kpiNamesService;
 
     @GetMapping(path = "/delivery")
-    public List<DataRest> getDelivery(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                      @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getDelivery(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getDelivriesDateBetween(startDate, endDate);
     }
 
     @GetMapping(path = "/inventory")
-    public List<DataRest> getInventory(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                       @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getInventory(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getInventoryDateBetween(startDate, endDate);
     }
 
     @GetMapping(path = "/kaizen")
-    public List<DataRest> getKaizen(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getKaizen(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getKaizenDateBetween(startDate, endDate);
     }
 
     @GetMapping(path = "/productivity")
-    public List<DataRest> getProductivity(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getProductivity(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getProductivityDateBetween(startDate, endDate);
     }
 
     @GetMapping(path = "/quality")
-    public List<DataRest> getQuality(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getQuality(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getQualityDateBetween(startDate, endDate);
     }
 
     @GetMapping(path = "/safety")
-    public List<DataRest> getSafety(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getSafety(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getSafetyDateBetween(startDate, endDate);
     }
 
     @GetMapping(path = "/skills")
-    public List<DataRest> getSkkills(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-                                     @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
+    public List<DataRest> getSkkills(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
         return dataByDateService.getSkillsDateBetween(startDate, endDate);
     }
+
     @PostMapping("/kpio")
-    public void addFileToProject(@RequestParam String kpiOwn, @RequestParam String name, @RequestParam String coName,
-                                 @RequestParam(value = "file") MultipartFile file) throws IOException {
-        //FileEntity fileEntity=fileService.addFileToProject(projectName, file);
+    public void addFileToProject(@RequestParam String kpiOwn, @RequestParam String name, @RequestParam String coName, @RequestParam(value = "file") MultipartFile file) throws IOException {
         dataByDateService.addKpiOwner(kpiOwn, name, coName, file);
     }
 
     @PostMapping("/kpio/owner")
-    public void updateKpiOwner(@RequestParam String kpiOwn, @RequestParam String name, @RequestParam String coName){
+    public void updateKpiOwner(@RequestParam String kpiOwn, @RequestParam String name, @RequestParam String coName) {
         dataByDateService.updateKpiOwn(kpiOwn, name, coName);
     }
+
     @GetMapping("/downloadFile/{fileId:.+}")
     public ResponseEntity<ByteArrayResource> downloadFile(@PathVariable String fileId, HttpServletRequest request) throws FileNotFoundException {
         Files fileEntity = dataByDateService.getFileByFileId(fileId);
@@ -93,7 +86,7 @@ public class MainController {
     }
 
     @GetMapping("/kpiNames")
-    public List<KpiNameRest> updateKpiOwner(@RequestParam String kpiName){
+    public List<KpiNameRest> updateKpiOwner(@RequestParam String kpiName) {
         return kpiNamesService.kpiNamesList(kpiName);
     }
 
