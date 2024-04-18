@@ -115,12 +115,19 @@ public class SafetyServiceImpl implements SafetyService {
                     if (pm.getMotif().isEmpty()){
                         continue;
                     }
+                    Pareto fp = paretoRepo.findByMotif(pm.getMotif());
+                    if (fp == null) {
                         Pareto p = new Pareto();
                         p.setMotif(pm.getMotif());
                         p.setPercentage(pm.getPercentage());
                         p.setSafety(delivery);
                         pmsPrime.add(p);
-
+                    } else {
+                        fp.setMotif(pm.getMotif());
+                        fp.setPercentage(pm.getPercentage());
+                        fp.setSafety(delivery);
+                        pmsPrime.add(fp);
+                    }
                 }
                 paretoRepo.saveAll(pmsPrime);
             }
