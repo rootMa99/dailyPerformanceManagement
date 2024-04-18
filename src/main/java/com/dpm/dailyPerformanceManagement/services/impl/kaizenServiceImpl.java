@@ -114,11 +114,19 @@ public class kaizenServiceImpl implements KaizenService {
                     if (pm.getMotif().isEmpty()){
                         continue;
                     }
-                    Pareto p=new Pareto();
-                    p.setMotif(pm.getMotif());
-                    p.setPercentage(pm.getPercentage());
-                    p.setKaizen(delivery);
-                    pmsPrime.add(p);
+                    Pareto fp = paretoRepo.findByMotif(pm.getMotif());
+                    if (fp == null) {
+                        Pareto p = new Pareto();
+                        p.setMotif(pm.getMotif());
+                        p.setPercentage(pm.getPercentage());
+                        p.setKaizen(delivery);
+                        pmsPrime.add(p);
+                    } else {
+                        fp.setMotif(pm.getMotif());
+                        fp.setPercentage(pm.getPercentage());
+                        fp.setKaizen(delivery);
+                        pmsPrime.add(fp);
+                    }
                 }
                 paretoRepo.saveAll(pmsPrime);
             }
