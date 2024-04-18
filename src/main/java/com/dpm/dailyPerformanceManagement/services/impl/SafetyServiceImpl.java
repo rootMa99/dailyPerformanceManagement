@@ -112,10 +112,12 @@ public class SafetyServiceImpl implements SafetyService {
                 Safety delivery = deliveryWithNameAp.get();
                 List<Pareto> pmsPrime = new ArrayList<>();
                 for (ParetoModel pm : pms) {
+                    System.out.println( pm.getPercentage() +" / "+ pm.getMotif());
                     if (pm.getMotif().isEmpty()){
                         continue;
                     }
                     Pareto fp = paretoRepo.findByMotif(pm.getMotif());
+                    System.out.println(fp +" / "+ pm.getPercentage() +" / "+ pm.getMotif());
                     if (fp == null) {
                         Pareto p = new Pareto();
                         p.setMotif(pm.getMotif());
