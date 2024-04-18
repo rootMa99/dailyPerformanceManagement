@@ -110,16 +110,24 @@ public class DeliveryServiceImpl implements DeliveryService {
             Optional<Delivery> deliveryWithNameAp = dbd.getDeliveries().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Delivery delivery = deliveryWithNameAp.get();
-                List<Pareto> pmsPrime= new ArrayList<>();
-                for (ParetoModel pm : pms){
-                    if (pm.getMotif().isEmpty()){
+                List<Pareto> pmsPrime = new ArrayList<>();
+                for (ParetoModel pm : pms) {
+                    if (pm.getMotif().isEmpty()) {
                         continue;
                     }
-                    Pareto p=new Pareto();
-                    p.setMotif(pm.getMotif());
-                    p.setPercentage(pm.getPercentage());
-                    p.setDelivery(delivery);
-                    pmsPrime.add(p);
+                    Pareto fp = paretoRepo.findByMotif(pm.getMotif());
+                    if (fp == null) {
+                        Pareto p = new Pareto();
+                        p.setMotif(pm.getMotif());
+                        p.setPercentage(pm.getPercentage());
+                        p.setDelivery(delivery);
+                        pmsPrime.add(p);
+                    } else {
+                        fp.setMotif(pm.getMotif());
+                        fp.setPercentage(pm.getPercentage());
+                        fp.setDelivery(delivery);
+                        pmsPrime.add(fp);
+                    }
                 }
                 paretoRepo.saveAll(pmsPrime);
             }
