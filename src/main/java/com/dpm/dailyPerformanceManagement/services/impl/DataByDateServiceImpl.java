@@ -303,7 +303,6 @@ public class DataByDateServiceImpl implements DataByDateService {
 
     @Override
     public Files uploadFile(MultipartFile file) throws IOException {
-
         String fileName = StringUtils.cleanPath(file.getOriginalFilename());
         try {
 

@@ -82,7 +82,6 @@ public class DeliveryServiceImpl implements DeliveryService {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getDeliveries().isEmpty()) {
             Optional<Delivery> deliveryWithNameAp = dbd.getDeliveries().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
-
             if (deliveryWithNameAp.isPresent()) {
                 Delivery delivery = deliveryWithNameAp.get();
                 List<ActionPlan> aps = new ArrayList<>();

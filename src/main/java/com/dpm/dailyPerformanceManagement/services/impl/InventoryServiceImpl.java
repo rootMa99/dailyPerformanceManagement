@@ -22,15 +22,16 @@ public class InventoryServiceImpl implements InventoryService {
     ActionPlanRepo actionPlanRepo;
     IKpiNamesRepo iKpiNamesRepo;
     ParetoRepo paretoRepo;
+
     @Override
     public void addInventoryData(RequestModel rm) {
-        IKpiNames dKpiNames=iKpiNamesRepo.findByKpiName(rm.getName());
-        if (dKpiNames==null){
-            IKpiNames dk=new IKpiNames();
+        IKpiNames dKpiNames = iKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames == null) {
+            IKpiNames dk = new IKpiNames();
             dk.setAlias(rm.getAlias());
-            if (rm.getName()==null){
+            if (rm.getName() == null) {
                 dk.setKpiName(rm.getAlias());
-            }else {
+            } else {
                 dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
@@ -47,7 +48,6 @@ public class InventoryServiceImpl implements InventoryService {
         } else {
             if (!dbd.getInventories().isEmpty()) {
                 Optional<Inventory> deliveryWithNameAp = dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
-
                 if (deliveryWithNameAp.isPresent()) {
                     Inventory delivery = deliveryWithNameAp.get();
                     delivery.setRealValue(rm.getReal());
@@ -82,9 +82,7 @@ public class InventoryServiceImpl implements InventoryService {
     public void addActionPlan(List<ActionPlanModel> apm, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getInventories().isEmpty()) {
-            Optional<Inventory> deliveryWithNameAp =
-                    dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
-
+            Optional<Inventory> deliveryWithNameAp = dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Inventory delivery = deliveryWithNameAp.get();
                 List<ActionPlan> aps = new ArrayList<>();
@@ -104,17 +102,17 @@ public class InventoryServiceImpl implements InventoryService {
             }
         }
     }
+
     @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getDeliveries().isEmpty()) {
-            Optional<Inventory> deliveryWithNameAp =
-                    dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Inventory> deliveryWithNameAp = dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Inventory delivery = deliveryWithNameAp.get();
-                List<Pareto> pmsPrime= new ArrayList<>();
-                for (ParetoModel pm : pms){
-                    if (pm.getMotif().isEmpty()){
+                List<Pareto> pmsPrime = new ArrayList<>();
+                for (ParetoModel pm : pms) {
+                    if (pm.getMotif().isEmpty()) {
                         continue;
                     }
                     Pareto fp = paretoRepo.findByMotif(pm.getMotif());

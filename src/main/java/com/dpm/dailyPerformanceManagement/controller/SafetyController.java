@@ -39,7 +39,6 @@ public class SafetyController {
     @PostMapping("/pareto")
     public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name,
                               @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
-        System.out.println(actionPlanModel+" / "+name+" / "+date );
         try {
             safetyService.addPareto(actionPlanModel, name, date);
         } catch (Error error) {

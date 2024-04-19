@@ -84,7 +84,6 @@ public class QualityServiceImpl implements QualityService {
         if (!dbd.getQualities().isEmpty()) {
             Optional<Quality> deliveryWithNameAp =
                     dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
-
             if (deliveryWithNameAp.isPresent()) {
                 Quality delivery = deliveryWithNameAp.get();
                 List<ActionPlan> aps = new ArrayList<>();
