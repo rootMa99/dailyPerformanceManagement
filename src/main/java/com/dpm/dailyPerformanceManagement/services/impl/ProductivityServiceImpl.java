@@ -86,15 +86,18 @@ public class ProductivityServiceImpl implements ProductivityService {
 
             if (deliveryWithNameAp.isPresent()) {
                 Productivity delivery = deliveryWithNameAp.get();
-                    ActionPlan acp = new ActionPlan();
-                    acp.setResp(ap.getResp());
-                    acp.setCauses(ap.getCauses());
-                    acp.setContermeasures(ap.getContermeasures());
-                    acp.setResp(ap.getResp());
-                    acp.setDueDate(ap.getDueDate());
-                    acp.setStatus(ap.getStatus());
-                    acp.setIssueDescription(ap.getIssueDescription());
-                    acp.setProductivity(delivery);
+                ActionPlan acp = new ActionPlan();
+                if (ap.getId() != null) {
+                    acp.setId(ap.getId());
+                }
+                acp.setResp(ap.getResp());
+                acp.setCauses(ap.getCauses());
+                acp.setContermeasures(ap.getContermeasures());
+                acp.setResp(ap.getResp());
+                acp.setDueDate(ap.getDueDate());
+                acp.setStatus(ap.getStatus());
+                acp.setIssueDescription(ap.getIssueDescription());
+                acp.setProductivity(delivery);
                 apr= actionPlanRepo.save(acp);
             }
         }
