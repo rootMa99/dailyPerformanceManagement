@@ -77,16 +77,15 @@ public class ProductivityServiceImpl implements ProductivityService {
     }
 
     @Override
-    public void addActionPlan(List<ActionPlanModel> apm, String name, Date date) {
+    public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        ActionPlan apr=new ActionPlan();
         if (!dbd.getProductivities().isEmpty()) {
             Optional<Productivity> deliveryWithNameAp =
                     dbd.getProductivities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
 
             if (deliveryWithNameAp.isPresent()) {
                 Productivity delivery = deliveryWithNameAp.get();
-                List<ActionPlan> aps = new ArrayList<>();
-                for (ActionPlanModel ap : apm) {
                     ActionPlan acp = new ActionPlan();
                     acp.setResp(ap.getResp());
                     acp.setCauses(ap.getCauses());
@@ -96,11 +95,10 @@ public class ProductivityServiceImpl implements ProductivityService {
                     acp.setStatus(ap.getStatus());
                     acp.setIssueDescription(ap.getIssueDescription());
                     acp.setProductivity(delivery);
-                    aps.add(acp);
-                }
-                actionPlanRepo.saveAll(aps);
+                apr= actionPlanRepo.save(acp);
             }
         }
+        return apr;
     }
     @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
