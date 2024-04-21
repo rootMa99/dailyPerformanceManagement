@@ -87,6 +87,9 @@ public class DeliveryServiceImpl implements DeliveryService {
                 List<ActionPlan> aps = new ArrayList<>();
                 for (ActionPlanModel ap : apm) {
                     ActionPlan acp = new ActionPlan();
+                    if (ap.getId() != null) {
+                        acp.setId(ap.getId());
+                    }
                     acp.setResp(ap.getResp());
                     acp.setCauses(ap.getCauses());
                     acp.setContermeasures(ap.getContermeasures());
@@ -96,6 +99,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                     acp.setIssueDescription(ap.getIssueDescription());
                     acp.setDelivery(delivery);
                     aps.add(acp);
+
                 }
                 actionPlanRepo.saveAll(aps);
             }
