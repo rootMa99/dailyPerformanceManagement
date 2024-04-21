@@ -78,14 +78,14 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public void addActionPlan(List<ActionPlanModel> apm, String name, Date date) {
+    public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        ActionPlan apr=new ActionPlan();
         if (!dbd.getDeliveries().isEmpty()) {
             Optional<Delivery> deliveryWithNameAp = dbd.getDeliveries().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Delivery delivery = deliveryWithNameAp.get();
-                List<ActionPlan> aps = new ArrayList<>();
-                for (ActionPlanModel ap : apm) {
+
                     ActionPlan acp = new ActionPlan();
                     if (ap.getId() != null) {
                         acp.setId(ap.getId());
@@ -98,12 +98,10 @@ public class DeliveryServiceImpl implements DeliveryService {
                     acp.setStatus(ap.getStatus());
                     acp.setIssueDescription(ap.getIssueDescription());
                     acp.setDelivery(delivery);
-                    aps.add(acp);
-
-                }
-                actionPlanRepo.saveAll(aps);
+                apr= actionPlanRepo.save(acp);
             }
         }
+        return apr;
     }
 
     @Override
