@@ -77,29 +77,30 @@ public class kaizenServiceImpl implements KaizenService {
     }
 
     @Override
-    public void addActionPlan(List<ActionPlanModel> apm, String name, Date date) {
+    public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
+        ActionPlan apr=new ActionPlan();
         if (!dbd.getKaizens().isEmpty()) {
             Optional<Kaizen> deliveryWithNameAp = dbd.getKaizens().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
 
             if (deliveryWithNameAp.isPresent()) {
                 Kaizen delivery = deliveryWithNameAp.get();
-                List<ActionPlan> aps = new ArrayList<>();
-                for (ActionPlanModel ap : apm) {
-                    ActionPlan acp = new ActionPlan();
-                    acp.setResp(ap.getResp());
-                    acp.setCauses(ap.getCauses());
-                    acp.setContermeasures(ap.getContermeasures());
-                    acp.setResp(ap.getResp());
-                    acp.setDueDate(ap.getDueDate());
-                    acp.setStatus(ap.getStatus());
-                    acp.setIssueDescription(ap.getIssueDescription());
-                    acp.setKaizen(delivery);
-                    aps.add(acp);
+                ActionPlan acp = new ActionPlan();
+                if (ap.getId() != null) {
+                    acp.setId(ap.getId());
                 }
-                actionPlanRepo.saveAll(aps);
+                acp.setResp(ap.getResp());
+                acp.setCauses(ap.getCauses());
+                acp.setContermeasures(ap.getContermeasures());
+                acp.setResp(ap.getResp());
+                acp.setDueDate(ap.getDueDate());
+                acp.setStatus(ap.getStatus());
+                acp.setIssueDescription(ap.getIssueDescription());
+                acp.setKaizen(delivery);
+                apr= actionPlanRepo.save(acp);
             }
         }
+        return apr;
     }
     @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
