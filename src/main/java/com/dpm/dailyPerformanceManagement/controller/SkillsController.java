@@ -1,5 +1,6 @@
 package com.dpm.dailyPerformanceManagement.controller;
 
+import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
 import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
@@ -28,9 +29,19 @@ public class SkillsController {
     }
 
     @PostMapping("/actionPlan")
-    public void addActionPlan(@RequestBody List<ActionPlanModel> actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name,
+                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
-            skillsService.addActionPlan(actionPlanModel, name, date);
+            ActionPlan ap= skillsService.addActionPlan(actionPlanModel, name, date);
+            ActionPlanModel actionPlanModel1=new ActionPlanModel();
+            actionPlanModel1.setId(ap.getId());
+            actionPlanModel1.setResp(ap.getResp());
+            actionPlanModel1.setStatus(ap.getStatus());
+            actionPlanModel1.setContermeasures(ap.getContermeasures());
+            actionPlanModel1.setCauses(ap.getCauses());
+            actionPlanModel1.setDueDate(ap.getDueDate());
+            actionPlanModel1.setIssueDescription(ap.getIssueDescription());
+            return actionPlanModel1;
         } catch (Error error) {
             throw new RuntimeException(error);
         }
