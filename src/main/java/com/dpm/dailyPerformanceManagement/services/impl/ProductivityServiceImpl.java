@@ -6,9 +6,12 @@ import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.ProductivityService;
+import com.dpm.dailyPerformanceManagement.services.UploadDataViaExcel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -135,4 +138,17 @@ public class ProductivityServiceImpl implements ProductivityService {
         }
     }
 
+    @Override
+    public void addDataViaExcel(MultipartFile file){
+        if (UploadDataViaExcel.isValidFormat(file)) {
+            try{
+                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm: requestModels){
+                    System.out.println(rm);
+                }
+            }catch (IOException e){
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

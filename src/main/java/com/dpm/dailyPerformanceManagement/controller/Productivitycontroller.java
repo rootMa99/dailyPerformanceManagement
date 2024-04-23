@@ -8,6 +8,7 @@ import com.dpm.dailyPerformanceManagement.services.ProductivityService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,10 @@ public class Productivitycontroller {
             throw new RuntimeException(error);
         }
     }
-
+    @PostMapping(path = "/uploadData")
+    public void saveDataToDataBase(MultipartFile file) throws IllegalAccessException {
+        productivityService.addDataViaExcel(file);
+    }
     @PostMapping("/actionPlan")
     public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name,
                            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
