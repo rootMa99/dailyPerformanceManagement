@@ -8,6 +8,7 @@ import com.dpm.dailyPerformanceManagement.services.SkillsService;
 import lombok.AllArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 import java.util.List;
@@ -26,6 +27,10 @@ public class SkillsController {
         } catch (Error error) {
             throw new RuntimeException(error);
         }
+    }
+    @PostMapping(path = "/uploadData")
+    public void saveDataToDataBase(MultipartFile file) throws IllegalAccessException {
+        skillsService.addDataViaExcel(file);
     }
 
     @PostMapping("/actionPlan")
