@@ -26,6 +26,7 @@ public class UploadDataViaExcel {
     }
 
     public static List<RequestModel> getDataFromExcel(InputStream is){
+        System.out.println("extraction started");
         List<RequestModel> rrm=new ArrayList<>();
         boolean done = false;
         try{
@@ -78,6 +79,7 @@ public class UploadDataViaExcel {
                     }
                     cellIndex++;
                 }
+                rowIndex++;
                 rrm.add(rm);
             }
         } catch (IOException e){
