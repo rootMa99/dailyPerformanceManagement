@@ -6,9 +6,12 @@ import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.SkillsService;
+import com.dpm.dailyPerformanceManagement.services.UploadDataViaExcel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,15 +25,16 @@ public class SkillsServiceImpl implements SkillsService {
     SkillsRepo skillsRepo;
     SkKpiNamesRepo skKpiNamesRepo;
     ParetoRepo paretoRepo;
+
     @Override
     public void addSkillsData(RequestModel rm) {
-        SkKpiNames dKpiNames=skKpiNamesRepo.findByKpiName(rm.getName());
-        if (dKpiNames==null){
-            SkKpiNames dk=new SkKpiNames();
+        SkKpiNames dKpiNames = skKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames == null) {
+            SkKpiNames dk = new SkKpiNames();
             dk.setAlias(rm.getAlias());
-            if (rm.getName()==null){
+            if (rm.getName() == null) {
                 dk.setKpiName(rm.getAlias());
-            }else {
+            } else {
                 dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
@@ -46,8 +50,7 @@ public class SkillsServiceImpl implements SkillsService {
             skillsRepo.save(d);
         } else {
             if (!dbd.getSkillsList().isEmpty()) {
-                Optional<Skills> deliveryWithNameAp =
-                        dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
+                Optional<Skills> deliveryWithNameAp = dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
 
                 if (deliveryWithNameAp.isPresent()) {
                     Skills delivery = deliveryWithNameAp.get();
@@ -71,10 +74,10 @@ public class SkillsServiceImpl implements SkillsService {
         Skills d = new Skills();
         d.setTargetValue(rm.getTarget());
         d.setRealValue(rm.getReal());
-        if (rm.getName()==null){
+        if (rm.getName() == null) {
             d.setName(rm.getAlias());
 
-        }else {
+        } else {
             d.setName(rm.getName());
         }
         d.setType(rm.getType());
@@ -85,14 +88,13 @@ public class SkillsServiceImpl implements SkillsService {
     @Override
     public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
-        ActionPlan apr=new ActionPlan();
+        ActionPlan apr = new ActionPlan();
         if (!dbd.getSkillsList().isEmpty()) {
-            Optional<Skills> deliveryWithNameAp =
-                    dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Skills> deliveryWithNameAp = dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
 
             if (deliveryWithNameAp.isPresent()) {
                 Skills delivery = deliveryWithNameAp.get();
-                  ActionPlan acp = new ActionPlan();
+                ActionPlan acp = new ActionPlan();
                 if (ap.getId() != null) {
                     acp.setId(ap.getId());
                 }
@@ -104,22 +106,22 @@ public class SkillsServiceImpl implements SkillsService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setSkills(delivery);
-                apr= actionPlanRepo.save(acp);
+                apr = actionPlanRepo.save(acp);
             }
         }
         return apr;
     }
+
     @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getSkillsList().isEmpty()) {
-            Optional<Skills> deliveryWithNameAp =
-                    dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Skills> deliveryWithNameAp = dbd.getSkillsList().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Skills delivery = deliveryWithNameAp.get();
-                List<Pareto> pmsPrime= new ArrayList<>();
-                for (ParetoModel pm : pms){
-                    if (pm.getMotif().isEmpty()){
+                List<Pareto> pmsPrime = new ArrayList<>();
+                for (ParetoModel pm : pms) {
+                    if (pm.getMotif().isEmpty()) {
                         continue;
                     }
                     Pareto fp = paretoRepo.findByMotif(pm.getMotif());
@@ -137,6 +139,27 @@ public class SkillsServiceImpl implements SkillsService {
                     }
                 }
                 paretoRepo.saveAll(pmsPrime);
+            }
+        }
+    }
+
+    @Override
+    public void addDataViaExcel(MultipartFile file) {
+        System.out.println("action started");
+        if (UploadDataViaExcel.isValidFormat(file)) {
+            System.out.println("action tested");
+            try {
+                List<RequestModel> requestModels = UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm : requestModels) {
+                    System.out.println(rm);
+                    SkKpiNames pk = skKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk != null) {
+                        rm.setName(pk.getKpiName());
+                        addSkillsData(rm);
+                    }
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
         }
     }
