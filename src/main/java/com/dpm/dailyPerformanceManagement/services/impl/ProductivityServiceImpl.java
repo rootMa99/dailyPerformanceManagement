@@ -51,7 +51,7 @@ public class ProductivityServiceImpl implements ProductivityService {
             if (!dbd.getProductivities().isEmpty()) {
                 Optional<Productivity> deliveryWithNameAp =
                         dbd.getProductivities().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
-
+                System.out.println(deliveryWithNameAp);
                 if (deliveryWithNameAp.isPresent()) {
                     Productivity delivery = deliveryWithNameAp.get();
                     delivery.setRealValue(rm.getReal());
@@ -147,6 +147,11 @@ public class ProductivityServiceImpl implements ProductivityService {
                 List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
                 for (RequestModel rm: requestModels){
                     System.out.println(rm);
+                    PkpiNames pk=pKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk!=null){
+                        rm.setName(pk.getKpiName());
+                        addProductivityData(rm);
+                    }
                 }
             }catch (IOException e){
                 throw new RuntimeException(e);
