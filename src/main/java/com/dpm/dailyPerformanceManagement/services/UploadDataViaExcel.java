@@ -78,6 +78,10 @@ public class UploadDataViaExcel {
                         }
                     }
                     cellIndex++;
+                    if (cellIndex == 5) {
+                        rowIndex++;
+                        break;
+                    }
                 }
                 rowIndex++;
                 rrm.add(rm);
