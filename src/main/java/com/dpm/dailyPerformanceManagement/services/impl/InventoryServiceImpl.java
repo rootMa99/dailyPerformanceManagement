@@ -6,9 +6,12 @@ import com.dpm.dailyPerformanceManagement.models.ParetoModel;
 import com.dpm.dailyPerformanceManagement.models.RequestModel;
 import com.dpm.dailyPerformanceManagement.repositories.*;
 import com.dpm.dailyPerformanceManagement.services.InventoryService;
+import com.dpm.dailyPerformanceManagement.services.UploadDataViaExcel;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -131,6 +134,27 @@ public class InventoryServiceImpl implements InventoryService {
                     }
                 }
                 paretoRepo.saveAll(pmsPrime);
+            }
+        }
+    }
+
+    @Override
+    public void addDataViaExcel(MultipartFile file){
+        System.out.println("action started");
+        if (UploadDataViaExcel.isValidFormat(file)) {
+            System.out.println("action tested");
+            try{
+                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm: requestModels){
+                    System.out.println(rm);
+                    IKpiNames pk=iKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk!=null){
+                        rm.setName(pk.getKpiName());
+                        addInventoryData(rm);
+                    }
+                }
+            }catch (IOException e){
+                throw new RuntimeException(e);
             }
         }
     }
