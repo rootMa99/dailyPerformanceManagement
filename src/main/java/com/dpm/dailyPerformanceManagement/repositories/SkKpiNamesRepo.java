@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface SkKpiNamesRepo extends JpaRepository<SkKpiNames, Long> {
     SkKpiNames findByKpiName(String name);
+    SkKpiNames findByAlias(String name);
 }

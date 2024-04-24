@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface IKpiNamesRepo extends JpaRepository<IKpiNames, Long> {
     IKpiNames findByKpiName(String name);
+    IKpiNames findByAlias(String name);
 }
