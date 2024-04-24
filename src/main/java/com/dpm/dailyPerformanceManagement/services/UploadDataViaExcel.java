@@ -25,11 +25,11 @@ public class UploadDataViaExcel {
         return Objects.equals(file.getContentType(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
     }
 
-    public static List<RequestModel> getDataFromExcel(InputStream is){
+    public static List<RequestModel> getDataFromExcel(InputStream is) {
         System.out.println("extraction started");
-        List<RequestModel> rrm=new ArrayList<>();
+        List<RequestModel> rrm = new ArrayList<>();
         boolean done = false;
-        try{
+        try {
             XSSFWorkbook workbook = new XSSFWorkbook(is);
             XSSFSheet sheet = workbook.getSheet("DATA");
             int rowIndex = 0;
@@ -43,7 +43,7 @@ public class UploadDataViaExcel {
                 }
                 Iterator<Cell> cellIterator = row.iterator();
                 int cellIndex = 0;
-                RequestModel rm=new RequestModel();
+                RequestModel rm = new RequestModel();
                 while (cellIterator.hasNext() && !done) {
                     Cell cell = row.getCell(cellIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK);
                     switch (cellIndex) {
@@ -86,7 +86,7 @@ public class UploadDataViaExcel {
                 rowIndex++;
                 rrm.add(rm);
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             throw new RuntimeException(e);
         }
         return rrm;

@@ -83,7 +83,7 @@ public class SafetyServiceImpl implements SafetyService {
     @Override
     public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
-        ActionPlan apr=new ActionPlan();
+        ActionPlan apr = new ActionPlan();
         if (!dbd.getSafeties().isEmpty()) {
             Optional<Safety> deliveryWithNameAp = dbd.getSafeties().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
 
@@ -102,14 +102,14 @@ public class SafetyServiceImpl implements SafetyService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setSafety(delivery);
-                apr= actionPlanRepo.save(acp);
+                apr = actionPlanRepo.save(acp);
 
             }
         }
         return apr;
     }
 
-@Override
+    @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getSafeties().isEmpty()) {
@@ -118,7 +118,7 @@ public class SafetyServiceImpl implements SafetyService {
                 Safety delivery = deliveryWithNameAp.get();
                 List<Pareto> pmsPrime = new ArrayList<>();
                 for (ParetoModel pm : pms) {
-                    if (pm.getMotif().isEmpty()){
+                    if (pm.getMotif().isEmpty()) {
                         continue;
                     }
                     Pareto fp = paretoRepo.findByMotif(pm.getMotif());
@@ -141,21 +141,21 @@ public class SafetyServiceImpl implements SafetyService {
     }
 
     @Override
-    public void addDataViaExcel(MultipartFile file){
+    public void addDataViaExcel(MultipartFile file) {
         System.out.println("action started");
         if (UploadDataViaExcel.isValidFormat(file)) {
             System.out.println("action tested");
-            try{
-                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
-                for (RequestModel rm: requestModels){
+            try {
+                List<RequestModel> requestModels = UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm : requestModels) {
                     System.out.println(rm);
-                    SfKpiNames pk=sfKpiNamesRepo.findByAlias(rm.getAlias());
-                    if (pk!=null){
+                    SfKpiNames pk = sfKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk != null) {
                         rm.setName(pk.getKpiName());
                         addSafetyData(rm);
                     }
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
