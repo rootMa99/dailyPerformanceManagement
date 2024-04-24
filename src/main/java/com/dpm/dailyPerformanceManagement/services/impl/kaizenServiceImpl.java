@@ -26,15 +26,16 @@ public class kaizenServiceImpl implements KaizenService {
     ActionPlanRepo actionPlanRepo;
     KKpiNamesRepo kKpiNamesRepo;
     ParetoRepo paretoRepo;
+
     @Override
     public void addKaizenData(RequestModel rm) {
-        KKpiNames dKpiNames=kKpiNamesRepo.findByKpiName(rm.getName());
-        if (dKpiNames==null){
-            KKpiNames dk=new KKpiNames();
+        KKpiNames dKpiNames = kKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames == null) {
+            KKpiNames dk = new KKpiNames();
             dk.setAlias(rm.getAlias());
-            if (rm.getName()==null){
+            if (rm.getName() == null) {
                 dk.setKpiName(rm.getAlias());
-            }else {
+            } else {
                 dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
@@ -82,7 +83,7 @@ public class kaizenServiceImpl implements KaizenService {
     @Override
     public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
-        ActionPlan apr=new ActionPlan();
+        ActionPlan apr = new ActionPlan();
         if (!dbd.getKaizens().isEmpty()) {
             Optional<Kaizen> deliveryWithNameAp = dbd.getKaizens().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
 
@@ -100,22 +101,22 @@ public class kaizenServiceImpl implements KaizenService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setKaizen(delivery);
-                apr= actionPlanRepo.save(acp);
+                apr = actionPlanRepo.save(acp);
             }
         }
         return apr;
     }
+
     @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getKaizens().isEmpty()) {
-            Optional<Kaizen> deliveryWithNameAp =
-                    dbd.getKaizens().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Kaizen> deliveryWithNameAp = dbd.getKaizens().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Kaizen delivery = deliveryWithNameAp.get();
-                List<Pareto> pmsPrime= new ArrayList<>();
-                for (ParetoModel pm : pms){
-                    if (pm.getMotif().isEmpty()){
+                List<Pareto> pmsPrime = new ArrayList<>();
+                for (ParetoModel pm : pms) {
+                    if (pm.getMotif().isEmpty()) {
                         continue;
                     }
                     Pareto fp = paretoRepo.findByMotif(pm.getMotif());
@@ -136,22 +137,23 @@ public class kaizenServiceImpl implements KaizenService {
             }
         }
     }
+
     @Override
-    public void addDataViaExcel(MultipartFile file){
+    public void addDataViaExcel(MultipartFile file) {
         System.out.println("action started");
         if (UploadDataViaExcel.isValidFormat(file)) {
             System.out.println("action tested");
-            try{
-                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
-                for (RequestModel rm: requestModels){
+            try {
+                List<RequestModel> requestModels = UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm : requestModels) {
                     System.out.println(rm);
-                    KKpiNames pk=kKpiNamesRepo.findByAlias(rm.getAlias());
-                    if (pk!=null){
+                    KKpiNames pk = kKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk != null) {
                         rm.setName(pk.getKpiName());
                         addKaizenData(rm);
                     }
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

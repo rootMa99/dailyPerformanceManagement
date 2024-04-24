@@ -84,7 +84,7 @@ public class InventoryServiceImpl implements InventoryService {
     @Override
     public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
-        ActionPlan apr=new ActionPlan();
+        ActionPlan apr = new ActionPlan();
         if (!dbd.getInventories().isEmpty()) {
             Optional<Inventory> deliveryWithNameAp = dbd.getInventories().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
@@ -101,7 +101,7 @@ public class InventoryServiceImpl implements InventoryService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setInventory(delivery);
-                apr= actionPlanRepo.save(acp);
+                apr = actionPlanRepo.save(acp);
             }
         }
         return apr;
@@ -139,21 +139,21 @@ public class InventoryServiceImpl implements InventoryService {
     }
 
     @Override
-    public void addDataViaExcel(MultipartFile file){
+    public void addDataViaExcel(MultipartFile file) {
         System.out.println("action started");
         if (UploadDataViaExcel.isValidFormat(file)) {
             System.out.println("action tested");
-            try{
-                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
-                for (RequestModel rm: requestModels){
+            try {
+                List<RequestModel> requestModels = UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm : requestModels) {
                     System.out.println(rm);
-                    IKpiNames pk=iKpiNamesRepo.findByAlias(rm.getAlias());
-                    if (pk!=null){
+                    IKpiNames pk = iKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk != null) {
                         rm.setName(pk.getKpiName());
                         addInventoryData(rm);
                     }
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

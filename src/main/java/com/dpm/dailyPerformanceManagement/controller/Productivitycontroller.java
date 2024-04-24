@@ -29,16 +29,17 @@ public class Productivitycontroller {
             throw new RuntimeException(error);
         }
     }
+
     @PostMapping(path = "/uploadData")
     public void saveDataToDataBase(MultipartFile file) throws IllegalAccessException {
         productivityService.addDataViaExcel(file);
     }
+
     @PostMapping("/actionPlan")
-    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name,
-                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
-            ActionPlan ap= productivityService.addActionPlan(actionPlanModel, name, date);
-            ActionPlanModel actionPlanModel1=new ActionPlanModel();
+            ActionPlan ap = productivityService.addActionPlan(actionPlanModel, name, date);
+            ActionPlanModel actionPlanModel1 = new ActionPlanModel();
             actionPlanModel1.setId(ap.getId());
             actionPlanModel1.setResp(ap.getResp());
             actionPlanModel1.setStatus(ap.getStatus());
@@ -53,8 +54,7 @@ public class Productivitycontroller {
     }
 
     @PostMapping("/pareto")
-    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name,
-                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
             productivityService.addPareto(actionPlanModel, name, date);
         } catch (Error error) {

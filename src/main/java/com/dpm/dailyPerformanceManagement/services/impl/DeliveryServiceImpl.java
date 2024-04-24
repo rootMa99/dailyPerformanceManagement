@@ -83,25 +83,25 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
-        ActionPlan apr=new ActionPlan();
+        ActionPlan apr = new ActionPlan();
         if (!dbd.getDeliveries().isEmpty()) {
             Optional<Delivery> deliveryWithNameAp = dbd.getDeliveries().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Delivery delivery = deliveryWithNameAp.get();
 
-                    ActionPlan acp = new ActionPlan();
-                    if (ap.getId() != null) {
-                        acp.setId(ap.getId());
-                    }
-                    acp.setResp(ap.getResp());
-                    acp.setCauses(ap.getCauses());
-                    acp.setContermeasures(ap.getContermeasures());
-                    acp.setResp(ap.getResp());
-                    acp.setDueDate(ap.getDueDate());
-                    acp.setStatus(ap.getStatus());
-                    acp.setIssueDescription(ap.getIssueDescription());
-                    acp.setDelivery(delivery);
-                apr= actionPlanRepo.save(acp);
+                ActionPlan acp = new ActionPlan();
+                if (ap.getId() != null) {
+                    acp.setId(ap.getId());
+                }
+                acp.setResp(ap.getResp());
+                acp.setCauses(ap.getCauses());
+                acp.setContermeasures(ap.getContermeasures());
+                acp.setResp(ap.getResp());
+                acp.setDueDate(ap.getDueDate());
+                acp.setStatus(ap.getStatus());
+                acp.setIssueDescription(ap.getIssueDescription());
+                acp.setDelivery(delivery);
+                apr = actionPlanRepo.save(acp);
             }
         }
         return apr;
@@ -139,21 +139,21 @@ public class DeliveryServiceImpl implements DeliveryService {
     }
 
     @Override
-    public void addDataViaExcel(MultipartFile file){
+    public void addDataViaExcel(MultipartFile file) {
         System.out.println("action started");
         if (UploadDataViaExcel.isValidFormat(file)) {
             System.out.println("action tested");
-            try{
-                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
-                for (RequestModel rm: requestModels){
+            try {
+                List<RequestModel> requestModels = UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm : requestModels) {
                     System.out.println(rm);
-                    DKpiNames pk=dKpiNamesRepo.findByAlias(rm.getAlias());
-                    if (pk!=null){
+                    DKpiNames pk = dKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk != null) {
                         rm.setName(pk.getKpiName());
                         addDeliveryData(rm);
                     }
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }

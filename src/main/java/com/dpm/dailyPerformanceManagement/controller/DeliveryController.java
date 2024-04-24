@@ -36,11 +36,10 @@ public class DeliveryController {
     }
 
     @PostMapping("/actionPlan")
-    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name,
-                                    @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
-            ActionPlan ap= deliveryService.addActionPlan(actionPlanModel, name, date);
-            ActionPlanModel actionPlanModel1=new ActionPlanModel();
+            ActionPlan ap = deliveryService.addActionPlan(actionPlanModel, name, date);
+            ActionPlanModel actionPlanModel1 = new ActionPlanModel();
             actionPlanModel1.setId(ap.getId());
             actionPlanModel1.setResp(ap.getResp());
             actionPlanModel1.setStatus(ap.getStatus());
@@ -55,8 +54,7 @@ public class DeliveryController {
     }
 
     @PostMapping("/pareto")
-    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name,
-                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
             deliveryService.addPareto(actionPlanModel, name, date);
         } catch (Error error) {

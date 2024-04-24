@@ -27,7 +27,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("delivery")) {
             List<DKpiNames> d = dKpiNamesRepo.findAll();
             for (DKpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());
@@ -37,7 +37,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("safety")) {
             List<SfKpiNames> d = sfKpiNamesRepo.findAll();
             for (SfKpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());
@@ -47,7 +47,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("skills")) {
             List<SkKpiNames> d = skKpiNamesRepo.findAll();
             for (SkKpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());
@@ -57,7 +57,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("quality")) {
             List<QKpiNames> d = qKpiNamesRepo.findAll();
             for (QKpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());
@@ -67,7 +67,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("kaizen")) {
             List<KKpiNames> d = kKpiNamesRepo.findAll();
             for (KKpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());
@@ -77,7 +77,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("inventory")) {
             List<IKpiNames> d = iKpiNamesRepo.findAll();
             for (IKpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());
@@ -87,7 +87,7 @@ public class KpiNamesServiceImpl implements KpiNamesService {
         if (name.equals("productivity")) {
             List<PkpiNames> d = pKpiNamesRepo.findAll();
             for (PkpiNames dk : d) {
-                KpiNameRest ds=new KpiNameRest();
+                KpiNameRest ds = new KpiNameRest();
                 ds.setKpiName(dk.getKpiName());
                 ds.setAlias(dk.getAlias());
                 ds.setType(dk.getType());

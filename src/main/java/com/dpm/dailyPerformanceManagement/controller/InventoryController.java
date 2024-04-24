@@ -35,11 +35,10 @@ public class InventoryController {
     }
 
     @PostMapping("/actionPlan")
-    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name,
-                           @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public ActionPlanModel addActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
-            ActionPlan ap= inventoryService.addActionPlan(actionPlanModel, name, date);
-            ActionPlanModel actionPlanModel1=new ActionPlanModel();
+            ActionPlan ap = inventoryService.addActionPlan(actionPlanModel, name, date);
+            ActionPlanModel actionPlanModel1 = new ActionPlanModel();
             actionPlanModel1.setId(ap.getId());
             actionPlanModel1.setResp(ap.getResp());
             actionPlanModel1.setStatus(ap.getStatus());
@@ -52,9 +51,9 @@ public class InventoryController {
             throw new RuntimeException(error);
         }
     }
+
     @PostMapping("/pareto")
-    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name,
-                          @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+    public void addPareto(@RequestBody List<ParetoModel> actionPlanModel, @RequestParam String name, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
         try {
             inventoryService.addPareto(actionPlanModel, name, date);
         } catch (Error error) {

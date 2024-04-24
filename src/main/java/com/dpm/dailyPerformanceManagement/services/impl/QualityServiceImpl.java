@@ -26,15 +26,16 @@ public class QualityServiceImpl implements QualityService {
     ActionPlanRepo actionPlanRepo;
     QKpiNamesRepo qKpiNamesRepo;
     ParetoRepo paretoRepo;
+
     @Override
     public void addQualityData(RequestModel rm) {
-        QKpiNames dKpiNames=qKpiNamesRepo.findByKpiName(rm.getName());
-        if (dKpiNames==null){
-            QKpiNames dk=new QKpiNames();
+        QKpiNames dKpiNames = qKpiNamesRepo.findByKpiName(rm.getName());
+        if (dKpiNames == null) {
+            QKpiNames dk = new QKpiNames();
             dk.setAlias(rm.getAlias());
-            if (rm.getName()==null){
+            if (rm.getName() == null) {
                 dk.setKpiName(rm.getAlias());
-            }else {
+            } else {
                 dk.setKpiName(rm.getName());
             }
             dk.setType(rm.getType());
@@ -50,8 +51,7 @@ public class QualityServiceImpl implements QualityService {
             qualityRepo.save(d);
         } else {
             if (!dbd.getQualities().isEmpty()) {
-                Optional<Quality> deliveryWithNameAp =
-                        dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
+                Optional<Quality> deliveryWithNameAp = dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(rm.getName())).findFirst();
 
                 if (deliveryWithNameAp.isPresent()) {
                     Quality delivery = deliveryWithNameAp.get();
@@ -84,10 +84,9 @@ public class QualityServiceImpl implements QualityService {
     @Override
     public ActionPlan addActionPlan(ActionPlanModel ap, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
-        ActionPlan apr=new ActionPlan();
+        ActionPlan apr = new ActionPlan();
         if (!dbd.getQualities().isEmpty()) {
-            Optional<Quality> deliveryWithNameAp =
-                    dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Quality> deliveryWithNameAp = dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Quality delivery = deliveryWithNameAp.get();
 
@@ -103,23 +102,23 @@ public class QualityServiceImpl implements QualityService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setQuality(delivery);
-                apr= actionPlanRepo.save(acp);
+                apr = actionPlanRepo.save(acp);
 
             }
         }
         return apr;
     }
+
     @Override
     public void addPareto(List<ParetoModel> pms, String name, Date date) {
         DataByDate dbd = dataByDateRepo.findByDateDpm(date);
         if (!dbd.getQualities().isEmpty()) {
-            Optional<Quality> deliveryWithNameAp =
-                    dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
+            Optional<Quality> deliveryWithNameAp = dbd.getQualities().stream().filter(delivery -> delivery.getName().equals(name)).findFirst();
             if (deliveryWithNameAp.isPresent()) {
                 Quality delivery = deliveryWithNameAp.get();
-                List<Pareto> pmsPrime= new ArrayList<>();
-                for (ParetoModel pm : pms){
-                    if (pm.getMotif().isEmpty()){
+                List<Pareto> pmsPrime = new ArrayList<>();
+                for (ParetoModel pm : pms) {
+                    if (pm.getMotif().isEmpty()) {
                         continue;
                     }
                     Pareto fp = paretoRepo.findByMotif(pm.getMotif());
@@ -140,22 +139,23 @@ public class QualityServiceImpl implements QualityService {
             }
         }
     }
+
     @Override
-    public void addDataViaExcel(MultipartFile file){
+    public void addDataViaExcel(MultipartFile file) {
         System.out.println("action started");
         if (UploadDataViaExcel.isValidFormat(file)) {
             System.out.println("action tested");
-            try{
-                List<RequestModel> requestModels=UploadDataViaExcel.getDataFromExcel(file.getInputStream());
-                for (RequestModel rm: requestModels){
+            try {
+                List<RequestModel> requestModels = UploadDataViaExcel.getDataFromExcel(file.getInputStream());
+                for (RequestModel rm : requestModels) {
                     System.out.println(rm);
-                    QKpiNames pk=qKpiNamesRepo.findByAlias(rm.getAlias());
-                    if (pk!=null){
+                    QKpiNames pk = qKpiNamesRepo.findByAlias(rm.getAlias());
+                    if (pk != null) {
                         rm.setName(pk.getKpiName());
                         addQualityData(rm);
                     }
                 }
-            }catch (IOException e){
+            } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
