@@ -53,6 +53,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();
@@ -90,6 +91,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();
@@ -127,6 +129,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();
@@ -164,6 +167,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();
@@ -201,6 +205,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();
@@ -238,6 +243,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();
@@ -275,6 +281,7 @@ public class DataByDateServiceImpl implements DataByDateService {
                 apm.setResp(ap.getResp());
                 apm.setDueDate(ap.getDueDate());
                 apm.setStatus(ap.getStatus());
+                apm.setOpenDate(ap.getOpenDate());
                 apms.add(apm);
             }
             List<ParetoModel> paretoModels = new ArrayList<>();

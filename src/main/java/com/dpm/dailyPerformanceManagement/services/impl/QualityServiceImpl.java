@@ -102,6 +102,7 @@ public class QualityServiceImpl implements QualityService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setQuality(delivery);
+                acp.setOpenDate(ap.getOpenDate());
                 apr = actionPlanRepo.save(acp);
 
             }

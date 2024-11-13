@@ -46,6 +46,7 @@ public class SkillsController {
             actionPlanModel1.setCauses(ap.getCauses());
             actionPlanModel1.setDueDate(ap.getDueDate());
             actionPlanModel1.setIssueDescription(ap.getIssueDescription());
+            actionPlanModel1.setOpenDate(ap.getOpenDate());
             return actionPlanModel1;
         } catch (Error error) {
             throw new RuntimeException(error);

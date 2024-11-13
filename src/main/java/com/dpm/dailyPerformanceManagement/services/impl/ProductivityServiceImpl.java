@@ -100,6 +100,7 @@ public class ProductivityServiceImpl implements ProductivityService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setProductivity(delivery);
+                acp.setOpenDate(ap.getOpenDate());
                 apr = actionPlanRepo.save(acp);
             }
         }

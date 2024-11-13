@@ -101,6 +101,7 @@ public class InventoryServiceImpl implements InventoryService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setInventory(delivery);
+                acp.setOpenDate(ap.getOpenDate());
                 apr = actionPlanRepo.save(acp);
             }
         }

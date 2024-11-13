@@ -18,7 +18,18 @@ public class ActionPlan {
     private String resp;
     @Temporal(TemporalType.DATE)
     private Date dueDate;
+    @Temporal(TemporalType.DATE)
+    private Date openDate;
     private String status;
+    private String cb;
+    private String rci;
+    private String cai;
+    private String epd;
+    private String lpa;
+    private String cav;
+    private String pcu;
+    private String swoi;
+    private String ll;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;

@@ -1,9 +1,12 @@
 package com.dpm.dailyPerformanceManagement.controller;
 
+import com.dpm.dailyPerformanceManagement.domain.ActionPlan;
 import com.dpm.dailyPerformanceManagement.domain.Files;
+import com.dpm.dailyPerformanceManagement.models.ActionPlanModel;
 import com.dpm.dailyPerformanceManagement.models.DataRest;
 import com.dpm.dailyPerformanceManagement.models.KpiNameRest;
 import com.dpm.dailyPerformanceManagement.models.KpiRest;
+import com.dpm.dailyPerformanceManagement.services.ActionPlanService;
 import com.dpm.dailyPerformanceManagement.services.DataByDateService;
 import com.dpm.dailyPerformanceManagement.services.KpiNamesService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,6 +31,7 @@ import java.util.List;
 public class MainController {
     DataByDateService dataByDateService;
     KpiNamesService kpiNamesService;
+    ActionPlanService aps;
 
     @GetMapping(path = "/delivery")
     public List<DataRest> getDelivery(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate) {
@@ -89,5 +93,13 @@ public class MainController {
     public List<KpiNameRest> updateKpiOwner(@RequestParam String kpiName) {
         return kpiNamesService.kpiNamesList(kpiName);
     }
-
+    @GetMapping("/aec")
+    @CrossOrigin(origins = "*")
+    public List<ActionPlanModel> getApByDateBetween(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate){
+        return aps.apm(startDate, endDate);
+    }
+    @PostMapping("/uacp")
+    public ActionPlanModel updateActionPlan(@RequestBody ActionPlanModel actionPlanModel, @RequestParam Long id){
+        return aps.updateActionPlan(actionPlanModel, id);
+    }
 }

@@ -98,6 +98,7 @@ public class DeliveryServiceImpl implements DeliveryService {
                 acp.setContermeasures(ap.getContermeasures());
                 acp.setResp(ap.getResp());
                 acp.setDueDate(ap.getDueDate());
+                acp.setOpenDate(ap.getOpenDate());
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setDelivery(delivery);

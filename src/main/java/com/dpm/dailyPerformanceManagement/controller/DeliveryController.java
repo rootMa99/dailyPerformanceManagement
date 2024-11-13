@@ -46,6 +46,7 @@ public class DeliveryController {
             actionPlanModel1.setContermeasures(ap.getContermeasures());
             actionPlanModel1.setCauses(ap.getCauses());
             actionPlanModel1.setDueDate(ap.getDueDate());
+            actionPlanModel1.setOpenDate(ap.getOpenDate());
             actionPlanModel1.setIssueDescription(ap.getIssueDescription());
             return actionPlanModel1;
         } catch (Error error) {

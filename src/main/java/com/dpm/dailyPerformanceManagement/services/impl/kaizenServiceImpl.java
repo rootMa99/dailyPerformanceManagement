@@ -101,6 +101,7 @@ public class kaizenServiceImpl implements KaizenService {
                 acp.setStatus(ap.getStatus());
                 acp.setIssueDescription(ap.getIssueDescription());
                 acp.setKaizen(delivery);
+                acp.setOpenDate(ap.getOpenDate());
                 apr = actionPlanRepo.save(acp);
             }
         }
